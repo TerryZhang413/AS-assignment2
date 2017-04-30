@@ -1,12 +1,12 @@
 package Ozlympic;
 
-public class User {
+public class Users {
     private String userID;
     private String name;
     private int age;
     private String state;
 
-    public User(String userID, String name, int age, String state) {
+    public Users(String userID, String name, int age, String state) {
         this.userID = userID;
         this.name = name;
         this.age = age;

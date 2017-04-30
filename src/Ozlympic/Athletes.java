@@ -1,10 +1,10 @@
 package Ozlympic;
 
-public class Athlete extends User {
+public class Athletes extends Users {
     private int athleteType;
     private int point;
 
-    public Athlete(String userID, String name, int age, String state,
+    public Athletes(String userID, String name, int age, String state,
             int athleteType) {
         super(userID, name, age, state);
         this.setAthleteType(athleteType);

@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class LoadData {
-    private ArrayList<Athlete> athletes = new ArrayList<Athlete>();
-    private ArrayList<Official> officials = new ArrayList<Official>();
+    private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
+    private ArrayList<Officials> officials = new ArrayList<Officials>();
     ArrayList<Game> game = new ArrayList<Game>();
 
-    public LoadData(ArrayList<Game> game, ArrayList<Official> officials,
-            ArrayList<Athlete> athletes) {
+    public LoadData(ArrayList<Game> game, ArrayList<Officials> officials,
+            ArrayList<Athletes> athletes) {
         this.game = game;
         this.officials = officials;
         this.athletes = athletes;
@@ -31,7 +31,7 @@ public class LoadData {
     public void loadOfficial(ArrayList<String> newOfficials) {
         try {
             for (int i = 0; i < newOfficials.size(); i = i + 4) {
-                this.officials.add(new Official(newOfficials.get(i),
+                this.officials.add(new Officials(newOfficials.get(i),
                         newOfficials.get(i + 1),
                         Integer.valueOf(newOfficials.get(i + 2)),
                         newOfficials.get(i + 3)));
@@ -45,7 +45,7 @@ public class LoadData {
         try {
             for (int i = 0; i < newAthletes.size(); i = i + 5) {
                 this.athletes.add(
-                        new Athlete(newAthletes.get(i), newAthletes.get(i + 1),
+                        new Athletes(newAthletes.get(i), newAthletes.get(i + 1),
                                 Integer.valueOf(newAthletes.get(i + 2)),
                                 newAthletes.get(i + 3),
                                 Integer.valueOf(newAthletes.get(i + 4))));
