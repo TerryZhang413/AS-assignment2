@@ -1,8 +1,15 @@
 package Ozlympic;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
+
+import Exception.NoGameCreated;
+import Exception.NoRefereeException;
+import Exception.OutOfGameType;
+import Exception.TooFewAthleteException;
 
 public class Driver implements SportGame {
 	private Scanner keyBoard = new Scanner(System.in);
@@ -67,8 +74,6 @@ public class Driver implements SportGame {
 	}
 
 	public void exit() {
-		System.out.println("See you!");
-		keyBoard.close();
 		System.exit(0);
 	}
 
@@ -80,14 +85,14 @@ public class Driver implements SportGame {
 		return gameList;
 	}
 
-	public Boolean starGame() {
+	public Game starGame() {
 		int maxTime = 0, miniTime = 0;
 		int resultCount;
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		ArrayList<Integer> ranks = new ArrayList<Integer>();
 		try {
 			if (gameType == -1) {
-				throw new Exception("Error: Have to choose a type of game first!");
+				throw new NoGameCreated();
 			}
 			switch (gameType) {
 			case 1:
@@ -111,11 +116,14 @@ public class Driver implements SportGame {
 			ranks = rank(gameIDIndex);
 			games.get(gameIDIndex).setRanks(ranks);
 			refreshPoint();
-			showResult(gameIDIndex);
+			String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+			time = time.substring(0, time.length() - 1);
+			games.get(gameIDIndex).setTime(time);
+			// showResult(gameIDIndex);
 			newGame(gameType);// prepare next game;
-			return showPredict(ranks, predictIndex);
+			return games.get(gameIDIndex);
 		} catch (Exception e) {
-			return false;
+			return null;
 		}
 
 	}
@@ -320,41 +328,31 @@ public class Driver implements SportGame {
 
 	}
 
-	public void selectGame(int gameType) {
+	public boolean selectGame(int newGameType) {
 		// select a game type from 1 to 3
-		Menus menus = new Menus();
-		int newGameType = 0;
-		menus.sportMenus();
-		do {
-			try {
-				newGameType = keyBoard.nextInt();
-				if ((newGameType < 1) || (newGameType > 3)) {
-					println("Error: The number must be in 1 to 3!");
-					print("Enter an option:");
-					continue;
-				}
-				if (newGameType == gameType)// Type doesn't change
-					return;
-				// type changed, initialize game type & prediction
-				gameType = newGameType;
-				if (games.size() > 0) { // try to find unused one
-					for (int i = 0; i < games.size(); i++) {
-						if ((games.get(i).getResults().size() == 0) && (games.get(i).getType() == gameType)) {
-							gameIDIndex = i;
-							gameType = newGameType;
-							return;
-						}
+		try {
+			if ((newGameType < 1) || (newGameType > 3)) {
+				throw new OutOfGameType();
+			}
+			if (newGameType == gameType)// Type doesn't change
+				return true;
+			// type changed, initialize game type & prediction
+			gameType = newGameType;
+			if (games.size() > 0) { // try to find unused one
+				for (int i = 0; i < games.size(); i++) {
+					if ((games.get(i).getResults().size() == 0) && (games.get(i).getType() == gameType)) {
+						gameIDIndex = i;
+						gameType = newGameType;
+						return true;
 					}
 				}
-				// create a new game
-				newGame(gameType);
-			} catch (Exception e) {
-				println("Error: Input must be an integer number!");
-				print("Enter an option:");
-				keyBoard.next();
 			}
-		} while ((newGameType < 1) || (newGameType > 3));
-		return;
+			// create a new game
+			newGame(gameType);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	private String getMaxGameID(String gameID, int gameType) {
@@ -407,12 +405,12 @@ public class Driver implements SportGame {
 			presentAthlete = getAthlete(gameType);
 			officialID = getOfficial();
 			if (presentAthlete == null) {
-				println("Number of athletes is less than 4!");
 				gameIDIndex = -1;
+				throw new TooFewAthleteException();
 			}
 			if (officialID == null) {
-				println("Can not find any official!");
 				gameIDIndex = -1;
+				throw new NoRefereeException();
 			}
 			if (gameIDIndex != -1) {
 				games.add(new Game(maxGameID, gameType, officialID, presentAthlete));

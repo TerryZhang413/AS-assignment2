@@ -11,7 +11,7 @@ public class NoRefereeException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public NoRefereeException(String gameID) {
-		System.out.println("Game " + gameID + "do not have a official");
+	public NoRefereeException() {
+		System.out.println("Game do not have a official");
 	}
 }

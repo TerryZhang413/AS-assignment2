@@ -12,7 +12,7 @@ public class TooFewAthleteException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public TooFewAthleteException(String gameID) {
-		System.out.println("Game " + gameID + "has not enough athlete");
+	public TooFewAthleteException() {
+		System.out.println("Game has not enough athlete");
 	}
 }
