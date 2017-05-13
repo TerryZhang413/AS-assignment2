@@ -1,0 +1,10 @@
+diff a/src/Ozlympic/Driver.java b/src/Ozlympic/Driver.java	(rejected hunks)
+@@ -297,7 +297,7 @@
+ 		}
+ 	}
+ 
+-	private void showFinalPoint() {
++	protected void showFinalPoint() {
+ 		// display all of information about athlete
+ 		String[] athleteInf = new String[5];
+ 		int countAthlete = 0;

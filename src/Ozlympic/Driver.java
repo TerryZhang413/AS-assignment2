@@ -13,6 +13,7 @@ import Exception.TooFewAthleteException;
 
 public class Driver implements SportGame {
 	private Scanner keyBoard = new Scanner(System.in);
+	private ModifyData modifyData;
 	private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
 	private ArrayList<Officials> officials = new ArrayList<Officials>();
 	private ArrayList<Game> games = new ArrayList<Game>();
@@ -24,8 +25,8 @@ public class Driver implements SportGame {
 
 	public Driver() {
 		// initialize data from file
-		LoadData loadData = new LoadData(games, officials, athletes);
-		loadData.loadData();
+		modifyData = new ModifyData(games, officials, athletes);
+		modifyData.loadData();
 	}
 
 	public void option() {
@@ -38,15 +39,15 @@ public class Driver implements SportGame {
 				switch (optionNumber) {
 				case 1:
 					// select a game type
-					// selectGame();
+					selectGame(1);
 					break;
 				case 2:
 					// select a prediction
-					// predict();
+					predict(1);
 					break;
 				case 3:
 					// star a game
-					// starGame();
+					starGame();
 					predictIndex = -1;
 					break;
 				case 4:
@@ -85,11 +86,12 @@ public class Driver implements SportGame {
 		return gameList;
 	}
 
-	public Game starGame() {
+	public boolean starGame() {
 		int maxTime = 0, miniTime = 0;
 		int resultCount;
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		ArrayList<Integer> ranks = new ArrayList<Integer>();
+		ArrayList<Integer> points = new ArrayList<Integer>();
 		try {
 			if (gameType == -1) {
 				throw new NoGameCreated();
@@ -108,24 +110,38 @@ public class Driver implements SportGame {
 				maxTime = 800;
 				break;
 			}
-			resultCount = games.get(gameIDIndex).getAthletes().size();
+			Game gameInfo = games.get(gameIDIndex);
+			resultCount = gameInfo.getAthletes().size();
 			for (int i = 0; i < resultCount; i++) {
 				results.add(randomTime(miniTime, maxTime));
 			}
-			games.get(gameIDIndex).setResults(results);
-			ranks = rank(gameIDIndex);
-			games.get(gameIDIndex).setRanks(ranks);
-			refreshPoint();
+			gameInfo.setResults(results);
+			ranks = rank(gameInfo);
+			points = calPoint(ranks);
+			gameInfo.setPoints(points);
+			// refreshPoint(gameInfo);
 			String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
 			time = time.substring(0, time.length() - 1);
-			games.get(gameIDIndex).setTime(time);
+			gameInfo.setTime(time);
+			modifyData.addRecord(gameInfo);
 			// showResult(gameIDIndex);
 			newGame(gameType);// prepare next game;
-			return games.get(gameIDIndex);
+			return true;
 		} catch (Exception e) {
-			return null;
+			return false;
 		}
+	}
 
+	public ArrayList<Integer> getResult() {
+		Game gameInfo = games.get(gameIDIndex);
+		ArrayList<Integer> results = gameInfo.getResults();
+		return results;
+	}
+
+	public ArrayList<Integer> getPoint() {
+		Game gameInfo = games.get(gameIDIndex);
+		ArrayList<Integer> points = gameInfo.getPoints();
+		return points;
 	}
 
 	public Boolean showPredict(ArrayList<Integer> ranks, int predictIndex) {
@@ -136,20 +152,40 @@ public class Driver implements SportGame {
 		return false;
 	}
 
-	public void refreshPoint() {
-		// find top 3 and add point into their documents
-		int resultCount;
-		resultCount = games.get(gameIDIndex).getAthletes().size();
-		for (int i = 0; i < resultCount; i++) {
-			switch (games.get(gameIDIndex).getRanks().get(i)) {
+	private ArrayList<Integer> calPoint(ArrayList<Integer> ranks) {
+		ArrayList<Integer> points = new ArrayList<Integer>(ranks.size());
+		for (int i = 0; i < ranks.size(); i++) {
+			switch (ranks.get(i)) {
 			case 1:
-				addPoint(games.get(gameIDIndex).getAthletes().get(i), 5);
+				points.add(5);
 				break;
 			case 2:
-				addPoint(games.get(gameIDIndex).getAthletes().get(i), 2);
+				points.add(2);
 				break;
 			case 3:
-				addPoint(games.get(gameIDIndex).getAthletes().get(i), 1);
+				points.add(1);
+				break;
+			default:
+				points.add(0);
+			}
+		}
+		return points;
+	}
+
+	private void refreshPoint(Game gameInfo) {
+		// find top 3 and add point into their documents
+		int resultCount;
+		resultCount = gameInfo.getAthletes().size();
+		for (int i = 0; i < resultCount; i++) {
+			switch (gameInfo.getPoints().get(i)) {
+			case 1:
+				addPoint(gameInfo.getAthletes().get(i), 5);
+				break;
+			case 2:
+				addPoint(gameInfo.getAthletes().get(i), 2);
+				break;
+			case 3:
+				addPoint(gameInfo.getAthletes().get(i), 1);
 				break;
 			}
 		}
@@ -170,9 +206,9 @@ public class Driver implements SportGame {
 
 	}
 
-	private ArrayList<Integer> rank(int index) {
+	private ArrayList<Integer> rank(Game gameInfo) {
 		ArrayList<Integer> ranks = new ArrayList<Integer>();
-		ArrayList<Integer> results = games.get(index).getResults();
+		ArrayList<Integer> results = gameInfo.getResults();
 		int sizeResult = results.size();
 		boolean existence;// weather this rank is created
 		ranks.add(1);// fist one is the least at first
@@ -218,7 +254,7 @@ public class Driver implements SportGame {
 		String official;
 		String[] athleteinf = new String[5];
 		int time = 0;
-		int rank = 0;
+		int point = 0;
 		int countAthlete = 0;
 		if (games.get(index).getResults().size() == 0)
 			return;// game maybe haven't run yet
@@ -237,14 +273,14 @@ public class Driver implements SportGame {
 		for (int i = 0; i < countAthlete; i++) {
 			athleteinf = getAthleteInf(games.get(index).getAthletes().get(i));
 			time = games.get(index).getResults().get(i);
-			rank = games.get(index).getRanks().get(i);
+			point = games.get(index).getPoints().get(i);
 
 			print(athleteinf[0], 15);
 			print(athleteinf[1], 5);
 			print(athleteinf[2], 7);
 			print(athleteinf[3], 15);
 			print(time, 5);
-			println(rank, 5);
+			println(point, 5);
 		}
 	}
 
@@ -365,6 +401,9 @@ public class Driver implements SportGame {
 			newGameID = Integer.valueOf(gameID);
 			newGameID++;
 			maxGameID = String.valueOf(newGameID);
+			for (int i = maxGameID.length(); i < stringLength - 1; i++) {
+				maxGameID = "0" + maxGameID;
+			}
 			switch (gameType) {
 			case 1:
 				maxGameID = "S" + maxGameID;
@@ -397,7 +436,7 @@ public class Driver implements SportGame {
 			}
 		}
 		if (maxGameID.equals("null")) {
-			maxGameID = "00";
+			maxGameID = "X00";
 			gameIDIndex = 0;
 		}
 		try {

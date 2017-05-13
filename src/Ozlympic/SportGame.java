@@ -9,11 +9,13 @@ public interface SportGame {
 
 	public void predict(int newIndex);
 
-	public Game starGame();
+	public boolean starGame();
 
 	public void showFinalResult();
 
-	public void refreshPoint();
+	public ArrayList<Integer> getResult();
+
+	public ArrayList<Integer> getPoint();
 
 	public void exit();
 }

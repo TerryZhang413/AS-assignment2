@@ -9,13 +9,23 @@ public class Game {
 	private String time;
 	private ArrayList<String> athletes = new ArrayList<String>();
 	private ArrayList<Integer> results = new ArrayList<Integer>();
-	private ArrayList<Integer> ranks = new ArrayList<Integer>();
+	private ArrayList<Integer> points = new ArrayList<Integer>();
 
 	public Game(String gameID, int type, String officialID, ArrayList<String> athletes) {
 		this.gameID = gameID;
 		this.type = type;
 		this.officialID = officialID;
 		this.athletes = athletes;
+	}
+
+	public Game(String gameID, String officialID, ArrayList<String> athletes, ArrayList<Integer> results,
+			ArrayList<Integer> points) {
+		this.gameID = gameID;
+		this.type = 0;
+		this.officialID = officialID;
+		this.athletes = athletes;
+		this.results = results;
+		this.points = points;
 	}
 
 	public String getGameID() {
@@ -58,12 +68,12 @@ public class Game {
 		this.results = results;
 	}
 
-	public ArrayList<Integer> getRanks() {
-		return ranks;
+	public ArrayList<Integer> getPoints() {
+		return points;
 	}
 
-	public void setRanks(ArrayList<Integer> ranks) {
-		this.ranks = ranks;
+	public void setPoints(ArrayList<Integer> points) {
+		this.points = points;
 	}
 
 	public String getTime() {
