@@ -2,6 +2,8 @@ package gui;
 
 
 import javafx.animation.KeyFrame;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -44,9 +46,10 @@ public class MultiWindow extends Application {
 	    
 	  Scene scene = new Scene(pane);
 	  primaryStage.setScene(scene); // Place the scene in the stage
+	//  scene.getStylesheets().add(MultiWindow.class.getResource("login.css").toExternalForm());
 	  primaryStage.show(); // Display the stage
       
-	  GameTypeMenu gtm = new GameTypeMenu();
+	  GameTypeMenu gtm = new GameTypeMenu(primaryStage);
 	  button1.setOnAction(gtm);
 	  RunningGame runGame=new RunningGame();
 	  button2.setOnAction(runGame);
@@ -55,14 +58,25 @@ public class MultiWindow extends Application {
    }
    
    public static void main(String[] args) {
+	   Application.setUserAgentStylesheet(STYLESHEET_CASPIAN);
+	   
        Application.launch(args);
    }
    
 }
 
 class GameTypeMenu implements EventHandler<ActionEvent> {
-	@Override
+
+
+		Stage closeStage;
+	
+		GameTypeMenu(Stage closeStage)
+		{
+		this.closeStage=closeStage;
+		}
+	
 	public void handle(ActionEvent e) {
+		  closeStage.close();
 	      Stage secondMenu = new Stage(); // Create a new stage
 	      secondMenu.setTitle("secondMenu"); // Set the stage title
 	      // Set a scene with a button in the stage
@@ -75,13 +89,14 @@ class GameTypeMenu implements EventHandler<ActionEvent> {
 		  Button button1 = new Button("1. Swimming");
 		  Button button2 = new Button("2. Cycling");
 		  Button button3 = new Button("3. Running");
+
 		  pane.getChildren().add(button1);
 		  pane.getChildren().add(button2);
 		  pane.getChildren().add(button3);
 		  
-		  GameType sGame = new GameType(secondMenu,"Swimming");
-		  GameType cGame = new GameType(secondMenu,"Cycling");
-		  GameType rGame = new GameType(secondMenu,"Running");
+		  GameType sGame = new GameType(secondMenu,closeStage,"Swimming");
+		  GameType cGame = new GameType(secondMenu,closeStage,"Cycling");
+		  GameType rGame = new GameType(secondMenu,closeStage,"Running");
 		  button1.setOnAction(sGame);
 		  button2.setOnAction(cGame);
 		  button3.setOnAction(rGame);
@@ -97,15 +112,18 @@ class GameType implements EventHandler<ActionEvent> {
 	
 	String gameType;
 	Stage closeStage;
+	Stage reopenStage;
 	
-	GameType(Stage closeStage,String gameType)
+	GameType(Stage closeStage,Stage reopenStage,String gameType)
 	{
 		this.closeStage=closeStage;
 		this.gameType=gameType;
+		this.reopenStage=reopenStage;
 	}
 	public void handle(ActionEvent e) {
 		MultiWindow.gameType=gameType;
 		closeStage.close();
+		reopenStage.show();
 	}
 }
 
@@ -136,11 +154,21 @@ class RunningGame implements EventHandler<ActionEvent> {
         final Text text6=new Text(10, 340, "Frank");
         final Text text7=new Text(10, 380, "Levis");
         final Text text8=new Text(10, 420, "Jack");
-        final Text Champion=new Text(250, 250, "Champion is Alex");
+        final Text Champion=new Text(200, 250, "Champion is Terry");
         Champion.visibleProperty();
         Champion.setOpacity(0);
 
-        
+		final ImageView runner = new ImageView(
+       	      new Image("image/runner.png")
+       	    );
+	//	final ImageView imageView2 = new ImageView(
+    //  	      new Image("image/grown.png")
+    //  	    );
+		runner.setLayoutX(10);
+		runner.setLayoutY(100);
+
+		border.getChildren().add(runner);
+       // border.getChildren().add(new ImageView(image));
         border.getChildren().add(gameName);
         border.getChildren().add(gameID);
         border.getChildren().add(text1);
@@ -156,6 +184,7 @@ class RunningGame implements EventHandler<ActionEvent> {
         border.getChildren().add(Champion);
         border.getChildren().add(new Text(425, 50, "End point"));
         border.getChildren().add(new Text(0, 50, "Start point"));
+
          
         //创建时间轴  
         final Timeline timeline=new Timeline();  
@@ -170,19 +199,21 @@ class RunningGame implements EventHandler<ActionEvent> {
         final KeyValue kv5=new KeyValue(text5.xProperty(), 450);
         final KeyValue kv6=new KeyValue(text6.xProperty(), 450);
         final KeyValue kv7=new KeyValue(text7.xProperty(), 450);
-        final KeyValue kv8=new KeyValue(text8.xProperty(), 450);
+        final KeyValue kv8=new KeyValue(text8.xProperty(), 450);     
         final KeyValue kv9=new KeyValue(Champion.opacityProperty(),1);
         final KeyValue kv10=new KeyValue(Champion.opacityProperty(),0);
+        final KeyValue kv11=new KeyValue(runner.xProperty(),450);
         final KeyFrame kf1=new KeyFrame(Duration.millis(5000), kv1);  
         final KeyFrame kf2=new KeyFrame(Duration.millis(8000), kv2); 
-        final KeyFrame kf3=new KeyFrame(Duration.millis(3000), kv3);  
+        final KeyFrame kf3=new KeyFrame(Duration.millis(14000), kv3);  
         final KeyFrame kf4=new KeyFrame(Duration.millis(8000), kv4);
         final KeyFrame kf5=new KeyFrame(Duration.millis(7000), kv5);  
         final KeyFrame kf6=new KeyFrame(Duration.millis(8700), kv6); 
         final KeyFrame kf7=new KeyFrame(Duration.millis(9000), kv7);  
-        final KeyFrame kf8=new KeyFrame(Duration.millis(14000), kv8);  
+        final KeyFrame kf8=new KeyFrame(Duration.millis(9000), kv8);
+        final KeyFrame kf11=new KeyFrame(Duration.millis(5000), kv11);
         //将关键帧加到时间轴中  
-       timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6,kf7,kf8);
+        timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6,kf7,kf8,kf11);
         timeline.getKeyFrames().addAll(
                 new KeyFrame(new Duration(14000) // set start position at 0
                 		,kv10
@@ -202,9 +233,20 @@ class RunningGame implements EventHandler<ActionEvent> {
     	Stage errorWarning = new Stage();
     	errorWarning.setTitle("Warning");
     	Text warningText=new Text("You need to Select a game firstly!!!");
-    	FlowPane pane=new FlowPane();
-    	Scene sceneWarning = new Scene(pane);
-    	pane.getChildren().add(warningText);
+    	BorderPane pane=new BorderPane();
+    	pane.setPadding(new Insets(10,20, 10, 20));
+    	
+		final ImageView warning = new ImageView(
+      	      new Image("image/warning.png")
+      	    );
+		Button bt1=new Button("Ok");
+		
+    	
+    	Scene sceneWarning = new Scene(pane,350,100);
+    	pane.setCenter(warningText);
+    	pane.setLeft(warning);
+    	pane.setBottom(bt1);
+    	bt1.setOnAction((ActionEvent t)->{errorWarning.close();});
     	errorWarning.setScene(sceneWarning); 
     	errorWarning.show();
     } catch (Exception e1) {
