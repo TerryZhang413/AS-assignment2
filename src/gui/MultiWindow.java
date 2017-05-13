@@ -1,6 +1,7 @@
 package gui;
 
 
+import Exception.NoGameCreated;
 import javafx.animation.KeyFrame;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -228,7 +229,7 @@ class RunningGame implements EventHandler<ActionEvent> {
     	runningGame.show(); // Display the stage
     	
     }
-    catch(WrongTypeException e1)
+    catch(NoGameCreated e1)
     {
     	Stage errorWarning = new Stage();
     	errorWarning.setTitle("Warning");
@@ -261,7 +262,7 @@ class RunningGame implements EventHandler<ActionEvent> {
 		String gameType="Unknown type";
 		if(MultiWindow.gameType.equals("Unknown type"))
 		{   
-			throw new WrongTypeException("WrongTypeException");
+			throw new NoGameCreated();
 		}
 		else 
 		gameType=MultiWindow.gameType;
