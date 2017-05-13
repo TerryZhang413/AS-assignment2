@@ -1,5 +1,8 @@
-package gui;
+package Ozlympic;
 
+
+import java.util.ArrayList;
+import java.util.Scanner;
 
 import Exception.NoGameCreated;
 import javafx.animation.KeyFrame;
@@ -14,19 +17,38 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+
 public class MultiWindow extends Application {
+	
+	private Scanner keyBoard = new Scanner(System.in);
+	private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
+	private ArrayList<Officials> officials = new ArrayList<Officials>();
+	private ArrayList<Game> games = new ArrayList<Game>();
+	private final int MAX_ATHLETE = 8;// maximum athlete in a game
+	private final int MIN_ATHLETE = 4;// minimum athlete in a game
+	private int gameIDIndex = -1;// the present game index
+	private int predictIndex = -1;
+	//private int gameType = -1;
+
+	public MultiWindow() {
+		// initialize data from file
+		LoadData loadData = new LoadData(games, officials, athletes);
+		loadData.loadData();
+	}
 	  static String gameType="Unknown type"; 
 	  static String gameId=null;
    @Override // Override the start method in the Application class
    public void start(Stage primaryStage) {
 	  
+	   Driver driver=new Driver();
 	  primaryStage.setTitle("Ozlympic Game"); // Set the stage title
 	  VBox pane = new VBox();
 	  pane.setPadding(new Insets(50, 100, 50, 100));
@@ -39,11 +61,13 @@ public class MultiWindow extends Application {
 	  Button button2 = new Button("2. Start the game");
 	  Button button3 = new Button("3. Display the final results of all games");
 	  Button button4 = new Button("4. Display the points of all athletes");
+	  Button button5 = new Button("5. Exit");
 	    
 	  pane.getChildren().add(button1);
 	  pane.getChildren().add(button2);
 	  pane.getChildren().add(button3);
-	  pane.getChildren().add(button4);
+	  pane.getChildren().add(button4); 
+	  pane.getChildren().add(button5);
 	    
 	  Scene scene = new Scene(pane);
 	  primaryStage.setScene(scene); // Place the scene in the stage
@@ -54,6 +78,10 @@ public class MultiWindow extends Application {
 	  button1.setOnAction(gtm);
 	  RunningGame runGame=new RunningGame();
 	  button2.setOnAction(runGame);
+	  ShowFinalPoint showFinalPoint=new ShowFinalPoint(driver,athletes);
+	  button4.setOnAction(showFinalPoint);
+	//  button4.setOnAction((ActionEvent t)->{driver.showFinalPoint();});
+	  button5.setOnAction((ActionEvent t)->{primaryStage.close(); System.exit(0);});
 	  
 
    }
@@ -68,9 +96,8 @@ public class MultiWindow extends Application {
 
 class GameTypeMenu implements EventHandler<ActionEvent> {
 
-
 		Stage closeStage;
-	
+		
 		GameTypeMenu(Stage closeStage)
 		{
 		this.closeStage=closeStage;
@@ -270,4 +297,59 @@ class RunningGame implements EventHandler<ActionEvent> {
 	}
 }
 
+class ShowFinalPoint implements EventHandler<ActionEvent> {
 
+	ArrayList<Athletes> athletes;
+	Driver driver=new Driver();
+	
+	ShowFinalPoint (Driver driver,ArrayList<Athletes> athletes)
+	{
+		this.athletes=athletes;
+		this.driver=driver;
+	}
+	@Override
+	public void handle(ActionEvent event) {
+		
+		Stage finalPoint = new Stage();
+		finalPoint.setTitle("Final Point"); 
+		GridPane  border=new GridPane ();  
+		border.setPadding(new Insets(5));
+		border.setHgap(20);
+		border.setVgap(5);
+        Scene scene=new Scene(border, 400, 600); 
+        final Text Name=new Text("Name");
+        final Text Age=new Text("Age");
+        final Text State=new Text("State");
+        final Text AthleteType=new Text("Athlete Type");
+        final Text Point=new Text("Point");
+        border.add(Name, 0, 0);
+        border.add(Age, 1, 0);
+        border.add(State, 2, 0);
+        border.add(AthleteType, 3, 0);
+        border.add(Point, 4, 0);
+        
+        
+        String[] athleteInf = new String[5];
+		int countAthlete = 0;
+		countAthlete = athletes.size();
+		if (countAthlete == 0) {
+			System.out.println("Thers isn't any athlete's information;");
+		} else {
+			for (int i = 0; i < countAthlete; i++) {
+				athleteInf = driver.getAthleteInf(athletes.get(i).getUserID());
+				border.add(new Text(athleteInf[0]),0,i+1);
+				border.add(new Text(athleteInf[1]),1,i+1);
+				border.add(new Text(athleteInf[2]),2,i+1);
+				border.add(new Text(athleteInf[3]),3,i+1);
+				border.add(new Text(athleteInf[4]),4,i+1);
+			}
+		}
+        
+        
+        
+        
+        finalPoint.setScene(scene);
+        finalPoint.show(); // Display the stage
+	}
+	
+}

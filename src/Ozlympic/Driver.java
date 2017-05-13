@@ -257,7 +257,7 @@ public class Driver implements SportGame {
 		return null;
 	}
 
-	private String[] getAthleteInf(String userID) {
+	String[] getAthleteInf(String userID) {
 		// Get athlete's information based on userID
 		String[] athleteinf = new String[5];
 		for (Athletes athlete : athletes) {
@@ -297,7 +297,7 @@ public class Driver implements SportGame {
 		}
 	}
 
-	private void showFinalPoint() {
+	protected void showFinalPoint() {
 		// display all of information about athlete
 		String[] athleteInf = new String[5];
 		int countAthlete = 0;
