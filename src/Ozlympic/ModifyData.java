@@ -14,8 +14,9 @@ public class ModifyData {
 	ArrayList<Game> game = new ArrayList<Game>();
 	private boolean DBexist;
 	private boolean gameRecord;
-	private String recordFilePath = "gameResults.txt";
-	private String athleteFilePath = "participants.txt";
+	private String classFilePath;
+	private String recordFilePath = "Data/gameResults.txt";
+	private String athleteFilePath = "Data/participants.txt";
 	private DataBase db;
 	private TextFile tf;
 
@@ -25,13 +26,7 @@ public class ModifyData {
 		this.athletes = athletes;
 		db = new DataBase();
 		tf = new TextFile();
-	}
-
-	public void writeResult() {
-		try {
-
-		} catch (Exception e) {
-		}
+		classFilePath = this.getClass().getResource("/").getFile();
 	}
 
 	public void loadData() {
@@ -52,7 +47,7 @@ public class ModifyData {
 		gameCols.add("Time");
 		gameCols.add("AthleteID");
 		gameCols.add("Result");
-		gameCols.add("Rank");
+		gameCols.add("Point");
 
 		if (DBexist) {
 			try {
@@ -67,7 +62,7 @@ public class ModifyData {
 
 		if (participants.size() == 0) {
 			try {
-				participants = tf.readText(athleteFilePath);
+				participants = tf.readText(classFilePath + athleteFilePath);
 				identifyType(participants);
 				if (DBexist) {
 					ArrayList<String> type = new ArrayList<String>();
@@ -89,8 +84,8 @@ public class ModifyData {
 
 		if (games.size() == 0) {
 			try {
-				games = tf.readText(recordFilePath);
-				initGameRecord(games);
+				games = tf.readText(classFilePath + recordFilePath);
+				initGameRecordText(games);
 				if (DBexist) {
 					ArrayList<String> type = new ArrayList<String>();
 					type.add("varchar(10)");
@@ -99,63 +94,92 @@ public class ModifyData {
 					type.add("varchar(10)");
 					type.add("varchar(10)");
 					type.add("varchar(2)");
-					db.writeDB("GameRecord", gameCols, games, type);
+					ArrayList<String> context = transRecordDB(game);
+					db.writeDB("GameRecord", gameCols, context, type);
 				}
 			} catch (IOException e) {
 				// GameRecord.txt doesn't exist, so new one
-				newRecordText(recordFilePath);
+				newRecordText(classFilePath + recordFilePath);
 			} catch (Exception e) {
 				System.out.println("Cannot create table (GameRecord)");
 			}
+		} else {
+			initGameRecordDB(games);
 		}
 	}
 
 	public void addRecord(Game gameInf) {
-		addRecordTexT(gameInf);
+		addRecordText(gameInf);
 		if (DBexist)
 			addRecordDB(gameInf);
 	}
 
-	private void addRecordDB(Game gameInf) {
-		ArrayList<String> athletes = gameInf.getAthletes();
-		ArrayList<Integer> records = gameInf.getResults();
-		ArrayList<Integer> points = gameInf.getPoints();
+	private ArrayList<String> transRecordDB(ArrayList<Game> game) {
+		// transform game to context which suitable to database
+		ArrayList<String> athletes;
+		ArrayList<Integer> records;
+		ArrayList<Integer> points;
 		ArrayList<String> gameCols = new ArrayList<String>(5);
-		ArrayList<String> context = new ArrayList<String>();
 		gameCols.add("GameID");
 		gameCols.add("OfficialID");
 		gameCols.add("Time");
 		gameCols.add("AthleteID");
 		gameCols.add("Result");
-		gameCols.add("Rank");
-		try {
-			for (int i = 0; i < athletes.size(); i++) {
-				context.add(gameInf.getGameID());
-				context.add(gameInf.getOfficialID());
-				context.add(gameInf.getTime());
-				context.add(athletes.get(i));
-				context.add(String.valueOf(records.get(i)));
-				context.add(String.valueOf(points.get(i)));
+		gameCols.add("Point");
+		ArrayList<String> context = new ArrayList<String>();
+		for (Game gameInf : game) {
+			athletes = gameInf.getAthletes();
+			records = gameInf.getResults();
+			points = gameInf.getPoints();
+			try {
+				for (int i = 0; i < athletes.size(); i++) {
+					context.add(gameInf.getGameID());
+					context.add(gameInf.getOfficialID());
+					context.add(gameInf.getTime());
+					context.add(athletes.get(i));
+					context.add(String.valueOf(records.get(i)));
+					context.add(String.valueOf(points.get(i)));
+				}
+			} catch (Exception e) {
 			}
-			db.writeDB("Participant", gameCols, context);
+		}
+		return context;
+	}
+
+	private void addRecordDB(Game gameInf) {
+		// write GameRecord in database
+		ArrayList<Game> game = new ArrayList<Game>();
+		game.add(gameInf);
+		ArrayList<String> context = transRecordDB(game);
+		ArrayList<String> gameCols = new ArrayList<String>(5);
+		gameCols.add("GameID");
+		gameCols.add("OfficialID");
+		gameCols.add("Time");
+		gameCols.add("AthleteID");
+		gameCols.add("Result");
+		gameCols.add("Point");
+		try {
+			db.writeDB("GameRecord", gameCols, context);
+			System.out.println("add record (DB):" + gameInf.getGameID());
 		} catch (Exception e) {
 		}
 	}
 
-	private void addRecordTexT(Game gameInf) {
+	private void addRecordText(Game gameInf) {
 		ArrayList<String> athletes = gameInf.getAthletes();
 		ArrayList<Integer> records = gameInf.getResults();
 		ArrayList<Integer> points = gameInf.getPoints();
 		ArrayList<String> context = new ArrayList<String>();
 		String introduction = gameInf.getGameID() + ", ";
 		introduction += gameInf.getOfficialID() + ", ";
-		introduction += gameInf.getTime() + "\n";
+		introduction += gameInf.getTime() + "\r\n";
 		context.add(introduction);
 		for (int i = 0; i < athletes.size(); i++) {
-			context.add(athletes.get(i) + ", " + records.get(i) + ", " + points.get(i) + "\n");
+			context.add(athletes.get(i) + ", " + records.get(i) + ", " + points.get(i) + "\r\n");
 		}
-		context.add("\n");
-		tf.writeText(recordFilePath, context);
+		context.add("\r\n");
+		tf.writeText(classFilePath + recordFilePath, context);
+		System.out.println("add record (TXT):" + gameInf.getGameID());
 	}
 
 	private void newRecordText(String filePath) {
@@ -169,14 +193,49 @@ public class ModifyData {
 		}
 	}
 
-	private void initGameRecord(ArrayList<String> games) {
-		String gameID, officialID, time, athleteID;
+	private void initGameRecordDB(ArrayList<String> games) {
+		String gameID = "", officialID = "", time = "";
+		Game gameTem;
+		ArrayList<String> athletes = new ArrayList<String>();
+		ArrayList<Integer> results = new ArrayList<Integer>();
+		ArrayList<Integer> points = new ArrayList<Integer>();
+		System.out.println("load record:");
+		for (int i = 0; i < games.size();) {
+			gameID = games.get(i++);
+			officialID = games.get(i++);
+			time = games.get(i++);
+			athletes.add(games.get(i++));
+			results.add(Integer.valueOf(games.get(i++)));
+			points.add(Integer.valueOf(games.get(i++)));
+			while (gameID.equals(games.get(i))) {
+				i = i + 3;
+				athletes.add(games.get(i++));
+				results.add(Integer.valueOf(games.get(i++)));
+				points.add(Integer.valueOf(games.get(i++)));
+				if (i == games.size())
+					break;
+			}
+			gameTem = new Game(gameID, officialID, athletes, results, points);
+			gameTem.setTime(time);
+			athletes = new ArrayList<String>();
+			results = new ArrayList<Integer>();
+			points = new ArrayList<Integer>();
+			game.add(gameTem);
+			System.out.println(gameTem.getGameID());
+
+		}
+
+	}
+
+	private void initGameRecordText(ArrayList<String> games) {
+		String gameID, officialID, time;
 		Game gameTem;
 		ArrayList<String> athletes = new ArrayList<String>();
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		ArrayList<Integer> points = new ArrayList<Integer>();
 		try {
-			for (int i = 0; i < games.size(); i++) {
+			System.out.println("load record:");
+			for (int i = 0; i < games.size();) {
 				gameID = games.get(i++);
 				officialID = games.get(i++);
 				time = games.get(i++);
@@ -184,15 +243,23 @@ public class ModifyData {
 					athletes.add(games.get(i++));
 					results.add(Integer.valueOf(games.get(i++)));
 					points.add(Integer.valueOf(games.get(i++)));
-					if (i == games.size())
+					if (i == games.size()) {
 						break;
+					}
+				}
+				if (i < games.size()) {
+					games.remove(i);
 				}
 				gameTem = new Game(gameID, officialID, athletes, results, points);
+				gameTem.setTime(time);
+				athletes = new ArrayList<String>();
+				results = new ArrayList<Integer>();
+				points = new ArrayList<Integer>();
 				game.add(gameTem);
+				System.out.println(gameTem.getGameID());
 			}
 		} catch (Exception e) {
 		}
-
 	}
 
 	public void identifyType(ArrayList<String> participants) {

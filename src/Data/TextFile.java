@@ -30,7 +30,7 @@ public class TextFile {
 	public boolean writeText(String address, ArrayList<String> context) {
 		FileWriter writer = null;
 		try {
-			writer = new FileWriter(address);
+			writer = new FileWriter(address, true);
 			for (String text : context) {
 				writer.write(text);
 			}
