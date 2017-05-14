@@ -9,7 +9,7 @@ public interface SportGame {
 
 	public void predict(int newIndex);
 
-	public boolean starGame();
+	public boolean starGame(int gameType);
 
 	public void showFinalResult();
 
