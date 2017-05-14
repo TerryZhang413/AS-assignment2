@@ -29,6 +29,7 @@ import javafx.util.Duration;
 public class MultiWindow extends Application {
 	
 	private Scanner keyBoard = new Scanner(System.in);
+	private ModifyData modifyData;
 	private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
 	private ArrayList<Officials> officials = new ArrayList<Officials>();
 	private ArrayList<Game> games = new ArrayList<Game>();
@@ -40,8 +41,8 @@ public class MultiWindow extends Application {
 
 	public MultiWindow() {
 		// initialize data from file
-		LoadData loadData = new LoadData(games, officials, athletes);
-		loadData.loadData();
+		modifyData = new ModifyData(games, officials, athletes);
+		modifyData.loadData();
 	}
 	  static String gameType="Unknown type"; 
 	  static String gameId=null;
@@ -300,7 +301,7 @@ class RunningGame implements EventHandler<ActionEvent> {
 class ShowFinalPoint implements EventHandler<ActionEvent> {
 
 	ArrayList<Athletes> athletes;
-	Driver driver=new Driver();
+	Driver driver;
 	
 	ShowFinalPoint (Driver driver,ArrayList<Athletes> athletes)
 	{
