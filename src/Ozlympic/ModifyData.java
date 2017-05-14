@@ -160,7 +160,7 @@ public class ModifyData {
 		gameCols.add("Point");
 		try {
 			db.writeDB("GameRecord", gameCols, context);
-			System.out.println("add record (DB):" + gameInf.getGameID());
+			// System.out.println("add record (DB):" + gameInf.getGameID());
 		} catch (Exception e) {
 		}
 	}
@@ -179,7 +179,7 @@ public class ModifyData {
 		}
 		context.add("\r\n");
 		tf.writeText(classFilePath + recordFilePath, context);
-		System.out.println("add record (TXT):" + gameInf.getGameID());
+		// System.out.println("add record (TXT):" + gameInf.getGameID());
 	}
 
 	private void newRecordText(String filePath) {
@@ -199,7 +199,7 @@ public class ModifyData {
 		ArrayList<String> athletes = new ArrayList<String>();
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		ArrayList<Integer> points = new ArrayList<Integer>();
-		System.out.println("load record:");
+		// System.out.println("load record:");
 		for (int i = 0; i < games.size();) {
 			gameID = games.get(i++);
 			officialID = games.get(i++);
@@ -221,7 +221,7 @@ public class ModifyData {
 			results = new ArrayList<Integer>();
 			points = new ArrayList<Integer>();
 			game.add(gameTem);
-			System.out.println(gameTem.getGameID());
+			// System.out.println(gameTem.getGameID());
 
 		}
 
@@ -234,7 +234,7 @@ public class ModifyData {
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		ArrayList<Integer> points = new ArrayList<Integer>();
 		try {
-			System.out.println("load record:");
+			// System.out.println("load record:");
 			for (int i = 0; i < games.size();) {
 				gameID = games.get(i++);
 				officialID = games.get(i++);
@@ -256,7 +256,7 @@ public class ModifyData {
 				results = new ArrayList<Integer>();
 				points = new ArrayList<Integer>();
 				game.add(gameTem);
-				System.out.println(gameTem.getGameID());
+				// System.out.println(gameTem.getGameID());
 			}
 		} catch (Exception e) {
 		}
