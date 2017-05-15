@@ -159,7 +159,7 @@ class GameType implements EventHandler<ActionEvent> {
 
 	public void handle(ActionEvent e) {
 		MultiWindow.gameTypeName = gameTypeName;
-		MultiWindow.gameType = gameType;
+		
 		closeStage.close();
 		reopenStage.show();
 	}
@@ -202,15 +202,14 @@ class RunningGame implements EventHandler<ActionEvent> {
     	final Text gameName=new Text(250, 20, "Game Type: "+ gameTypeName);
         final Text gameID=new Text(0, 20, "Game ID: "+gameInfo.getGameID());
         
-       
-        final Text text1=new Text(10, 140, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(0))[0]);
-        final Text text2=new Text(10, 180, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(1))[0]);
-        final Text text3=new Text(10, 220, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(2))[0]);
-        final Text text4=new Text(10, 260, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(3))[0]);
-        final Text text5=new Text(10, 300, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(4))[0]);
-        final Text text6=new Text(10, 340, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(5))[0]);
-        final Text text7=new Text(10, 380, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(6))[0]);
-        final Text text8=new Text(10, 420, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(7))[0]);
+        ArrayList <Text> athleteList=new ArrayList <Text>();
+        int x=140; //set the x for first athlete.
+        for(int i=0;i<gameInfo.getAthletes().size();i++)
+        {
+        	athleteList.add(new Text(10,x,driver.getAthleteInf(gameInfo.getAthletes().get(i))[0]));
+        	x+=40;
+        }
+        
         final Button showResult=new Button("Show Result");
         border.setBottom(showResult);
         ShowResult ShowResult=new ShowResult(games,driver,runningGame);
@@ -230,53 +229,44 @@ class RunningGame implements EventHandler<ActionEvent> {
 
 		border.getChildren().add(runner);
        // border.getChildren().add(new ImageView(image));
-        border.getChildren().addAll(official,gameName,gameID,text1,text2,text3,text4,text5,text6,text7,text8,endLine,startLine);
+        border.getChildren().addAll(official,gameName,gameID,endLine,startLine);
+        for(int j=0;j<athleteList.size();j++)
+        {
+        	border.getChildren().add(athleteList.get(j));
+        }
         border.getChildren().add(new Text(425, 50, "End point"));
         border.getChildren().add(new Text(0, 50, "Start point"));
 
          
         //创建时间轴  
-        final Timeline timeline=new Timeline();  
-//        timeline.setCycleCount(Timeline.INDEFINITE);//设置周期运行循环往复  
-     //   timeline.setAutoReverse(true);//设置动画的自动往返效果  
-          
-        //将x的位置在500ms内移动到300处  
-        final KeyValue kv1=new KeyValue(text1.xProperty(), 450);
-        final KeyValue kv2=new KeyValue(text2.xProperty(), 450);
-        final KeyValue kv3=new KeyValue(text3.xProperty(), 450);
-        final KeyValue kv4=new KeyValue(text4.xProperty(), 450);
-        final KeyValue kv5=new KeyValue(text5.xProperty(), 450);
-        final KeyValue kv6=new KeyValue(text6.xProperty(), 450);
-        final KeyValue kv7=new KeyValue(text7.xProperty(), 450);
-        final KeyValue kv8=new KeyValue(text8.xProperty(), 450);     
-  //      final KeyValue kv9=new KeyValue(Champion.opacityProperty(),1);
-  //      final KeyValue kv10=new KeyValue(Champion.opacityProperty(),0);
+        final Timeline timeline=new Timeline();          
+
+        ArrayList<KeyValue> keyValue=new  ArrayList<KeyValue>();
+        for(int j=0;j<athleteList.size();j++)
+        {
+        	keyValue.add(new KeyValue(athleteList.get(j).xProperty(), 450));
+        }
+        
         final KeyValue kv11=new KeyValue(runner.xProperty(),450);
-        switch(MultiWindow.gameType)
+        switch(driver.getGameType())
         {
         	case 1 :coefficient=0.02;break;
         	case 2 :coefficient=0.1;break;
         	case 3 :coefficient=1;break;
         }
-        final KeyFrame kf1=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(0)), kv1);  
-        final KeyFrame kf2=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(1)), kv2); 
-        final KeyFrame kf3=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(2)), kv3);  
-        final KeyFrame kf4=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(3)), kv4);
-        final KeyFrame kf5=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(4)), kv5);  
-        final KeyFrame kf6=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(5)), kv6); 
-        final KeyFrame kf7=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(6)), kv7);  
-        final KeyFrame kf8=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(7)), kv8);
+        ArrayList<KeyFrame> keyFrame=new  ArrayList<KeyFrame>();
+        for(int j=0;j<athleteList.size();j++)
+        {
+        	keyFrame.add(new KeyFrame(Duration.millis(coefficient*1000*gameInfo.getResults().get(j)), keyValue.get(j)));
+        }
+
         final KeyFrame kf11=new KeyFrame(Duration.millis(5000), kv11);
         //将关键帧加到时间轴中  
-        timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6,kf7,kf8,kf11);
-   /*     timeline.getKeyFrames().addAll(
-                new KeyFrame(new Duration(14000) // set start position at 0
-                		,kv10
-                		),
-                new KeyFrame(new Duration(15000), // set end position at 40s
-                		kv9)); */
-    
-    
+        for(int j=0;j<athleteList.size();j++)
+        {
+        	timeline.getKeyFrames().add(keyFrame.get(j));
+        }    
+        timeline.getKeyFrames().add(kf11);
         timeline.play();//运行  
 
         runningGame.setScene(scene);
