@@ -1,14 +1,11 @@
 package Ozlympic;
 
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import Exception.NoGameCreated;
 import Exception.NullResultException;
 import javafx.animation.KeyFrame;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -16,26 +13,28 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-
 public class MultiWindow extends Application {
-	
+
 	private Scanner keyBoard = new Scanner(System.in);
 	private ModifyData modifyData;
 	private final int MAX_ATHLETE = 8;// maximum athlete in a game
 	private final int MIN_ATHLETE = 4;// minimum athlete in a game
 	private int gameIDIndex = -1;// the present game index
 	private int predictIndex = -1;
+
 	private ArrayList<Game> games;
 	private ArrayList<Athletes> athletes;
 
@@ -101,88 +100,85 @@ public class MultiWindow extends Application {
        Application.launch(args);
    }
    
+
 }
 
 class GameTypeMenu implements EventHandler<ActionEvent> {
 
-		Stage closeStage;
-		
-		GameTypeMenu(Stage closeStage)
-		{
-		this.closeStage=closeStage;
-		}
-	
+	Stage closeStage;
+
+	GameTypeMenu(Stage closeStage) {
+		this.closeStage = closeStage;
+	}
+
 	public void handle(ActionEvent e) {
-		  closeStage.close();
-	      Stage secondMenu = new Stage(); // Create a new stage
-	      secondMenu.setTitle("secondMenu"); // Set the stage title
-	      // Set a scene with a button in the stage
-	      VBox pane = new VBox();
-		  pane.setPadding(new Insets(50, 100, 50, 100));
-		  pane.setSpacing(10);
-	      pane.getChildren().add(new Text("Ozlympic Game"));
-		  pane.getChildren().add(new Text("==================================="));
-		  pane.getChildren().add(new Text("Select a sport from 1 to 3"));
-		  Button button1 = new Button("1. Swimming");
-		  Button button2 = new Button("2. Cycling");
-		  Button button3 = new Button("3. Running");
+		closeStage.close();
+		Stage secondMenu = new Stage(); // Create a new stage
+		secondMenu.setTitle("secondMenu"); // Set the stage title
+		// Set a scene with a button in the stage
+		VBox pane = new VBox();
+		pane.setPadding(new Insets(50, 100, 50, 100));
+		pane.setSpacing(10);
+		pane.getChildren().add(new Text("Ozlympic Game"));
+		pane.getChildren().add(new Text("==================================="));
+		pane.getChildren().add(new Text("Select a sport from 1 to 3"));
+		Button button1 = new Button("1. Swimming");
+		Button button2 = new Button("2. Cycling");
+		Button button3 = new Button("3. Running");
 
+		pane.getChildren().add(button1);
+		pane.getChildren().add(button2);
+		pane.getChildren().add(button3);
 
-		  pane.getChildren().add(button1);
-		  pane.getChildren().add(button2);
-		  pane.getChildren().add(button3);
-		  
-		  GameType sGame = new GameType(secondMenu,closeStage,"Swimming",1);
-		  GameType cGame = new GameType(secondMenu,closeStage,"Cycling",2);
-		  GameType rGame = new GameType(secondMenu,closeStage,"Running",3);
-		  button1.setOnAction(sGame);
-		  button2.setOnAction(cGame);
-		  button3.setOnAction(rGame);
-		  
-		  Scene scene = new Scene(pane);
-	      secondMenu.setScene(scene);
-	      secondMenu.show(); // Display the stage
+		GameType sGame = new GameType(secondMenu, closeStage, "Swimming", 1);
+		GameType cGame = new GameType(secondMenu, closeStage, "Cycling", 2);
+		GameType rGame = new GameType(secondMenu, closeStage, "Running", 3);
+		button1.setOnAction(sGame);
+		button2.setOnAction(cGame);
+		button3.setOnAction(rGame);
+
+		Scene scene = new Scene(pane);
+		secondMenu.setScene(scene);
+		secondMenu.show(); // Display the stage
 	}
 }
 
-
 class GameType implements EventHandler<ActionEvent> {
-	
+
 	String gameTypeName;
 	Stage closeStage;
 	Stage reopenStage;
 	int gameType;
-	
-	GameType(Stage closeStage,Stage reopenStage,String gameTypeName,int gameType)
-	{
-		this.closeStage=closeStage;
-		this.gameTypeName=gameTypeName;
-		this.reopenStage=reopenStage;
-		this.gameType=gameType;
+
+	GameType(Stage closeStage, Stage reopenStage, String gameTypeName, int gameType) {
+		this.closeStage = closeStage;
+		this.gameTypeName = gameTypeName;
+		this.reopenStage = reopenStage;
+		this.gameType = gameType;
 	}
+
 	public void handle(ActionEvent e) {
-		MultiWindow.gameTypeName=gameTypeName;
-		MultiWindow.gameType=gameType;
+		MultiWindow.gameTypeName = gameTypeName;
+		MultiWindow.gameType = gameType;
 		closeStage.close();
 		reopenStage.show();
 	}
 }
-
-
 
 class RunningGame implements EventHandler<ActionEvent> {
 
 	Driver driver;
 	ArrayList<Game> games;
 	Stage reopenStage;
-	RunningGame(Driver driver,ArrayList<Game> games, Stage reopenStage)
-	{
-		this.driver=driver;
-		this.games=games;
-		this.reopenStage=reopenStage;
+
+	RunningGame(Driver driver, ArrayList<Game> games, Stage reopenStage) {
+		this.driver = driver;
+		this.games = games;
+		this.reopenStage = reopenStage;
 	}
-	
+
 	public void handle(ActionEvent e) {
+
 
     	
     try{
@@ -199,11 +195,14 @@ class RunningGame implements EventHandler<ActionEvent> {
     	RunningGame rg=new RunningGame(driver,games, reopenStage);
     	String gameTypeName=rg.getGameType();
     	
-    	Game gameInfo= driver.getGame(false);
+    	Game gameInfo = driver.getGame(false).get(0);
     	
-    	final Text official=new Text(100,20,"Offical: "+driver.getOffName(games.get(driver.gameIDIndex).getOfficialID()));
+    	
+    	final Text official=new Text(100,20,"Offical: "+driver.getOffName(gameInfo.getOfficialID()));
     	final Text gameName=new Text(250, 20, "Game Type: "+ gameTypeName);
-        final Text gameID=new Text(0, 20, "Game ID: "+games.get(driver.gameIDIndex).getGameID());
+        final Text gameID=new Text(0, 20, "Game ID: "+gameInfo.getGameID());
+        
+       
         final Text text1=new Text(10, 140, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(0))[0]);
         final Text text2=new Text(10, 180, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(1))[0]);
         final Text text3=new Text(10, 220, driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(2))[0]);
@@ -312,15 +311,13 @@ class RunningGame implements EventHandler<ActionEvent> {
     
 	}  
 	
-	public String getGameType() throws Exception 
-	{
-		String gameType="Unknown type";
-		if(MultiWindow.gameTypeName.equals("Unknown type"))
-		{   
+
+	public String getGameType() throws Exception {
+		String gameType = "Unknown type";
+		if (MultiWindow.gameTypeName.equals("Unknown type")) {
 			throw new NoGameCreated();
-		}
-		else 
-		gameType=MultiWindow.gameTypeName;
+		} else
+			gameType = MultiWindow.gameTypeName;
 		return gameType;
 	}
 }
@@ -329,94 +326,93 @@ class ShowFinalPoint implements EventHandler<ActionEvent> {
 
 	ArrayList<Athletes> athletes;
 	Driver driver;
-	
-	ShowFinalPoint (Driver driver,ArrayList<Athletes> athletes)
-	{
-		this.athletes=athletes;
-		this.driver=driver;
+
+	ShowFinalPoint(Driver driver, ArrayList<Athletes> athletes) {
+		this.athletes = athletes;
+		this.driver = driver;
 	}
+
 	@Override
 	public void handle(ActionEvent event) {
-		
+
 		Stage finalPoint = new Stage();
-		finalPoint.setTitle("Final Point"); 
-		GridPane  border=new GridPane ();  
+		finalPoint.setTitle("Final Point");
+		GridPane border = new GridPane();
 		border.setPadding(new Insets(5));
 		border.setHgap(20);
 		border.setVgap(5);
-        Scene scene=new Scene(border, 400, 550); 
-        final Text Name=new Text( "Name");
-        final Text Age=new Text("Age");
-        final Text State=new Text("State");
-        final Text AthleteType=new Text("Athlete Type");
-        final Text Point=new Text("Point");
-        border.add(Name, 0, 0);
-        border.add(Age, 1, 0);
-        border.add(State, 2, 0);
-        border.add(AthleteType, 3, 0);
-        border.add(Point, 4, 0);
-        
-        
-        String[] athleteInf = new String[5];
+		Scene scene = new Scene(border, 400, 550);
+		final Text Name = new Text("Name");
+		final Text Age = new Text("Age");
+		final Text State = new Text("State");
+		final Text AthleteType = new Text("Athlete Type");
+		final Text Point = new Text("Point");
+		border.add(Name, 0, 0);
+		border.add(Age, 1, 0);
+		border.add(State, 2, 0);
+		border.add(AthleteType, 3, 0);
+		border.add(Point, 4, 0);
+
+		String[] athleteInf = new String[5];
 		int countAthlete = 0;
 		countAthlete = athletes.size();
 		if (countAthlete == 0) {
 			Stage errorWarning = new Stage();
-	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text("Thers isn't any athlete's information!");
-	    	BorderPane pane=new BorderPane();
-	    	pane.setPadding(new Insets(10,20, 10, 20));
-	    	
-	    	String imagePath=this.getClass().getResource("/").getFile();
-	    	final ImageView warning = new ImageView(
-	        new Image(imagePath+"image/warning.png")
-	      	    );
-			Button bt1=new Button("Ok");	    	
-	    	Scene sceneWarning = new Scene(pane,350,100);
-	    	pane.setCenter(warningText);
-	    	pane.setLeft(warning);
-	    	pane.setBottom(bt1);
-	    	bt1.setOnAction((ActionEvent t)->{errorWarning.close();});
-	    	errorWarning.setScene(sceneWarning); 
-	    	errorWarning.show();
+			errorWarning.setTitle("Warning");
+			Text warningText = new Text("Thers isn't any athlete's information!");
+			BorderPane pane = new BorderPane();
+			pane.setPadding(new Insets(10, 20, 10, 20));
+
+			String imagePath = this.getClass().getResource("/").getFile();
+			final ImageView warning = new ImageView(new Image(imagePath + "image/warning.png"));
+			Button bt1 = new Button("Ok");
+			Scene sceneWarning = new Scene(pane, 350, 100);
+			pane.setCenter(warningText);
+			pane.setLeft(warning);
+			pane.setBottom(bt1);
+			bt1.setOnAction((ActionEvent t) -> {
+				errorWarning.close();
+			});
+			errorWarning.setScene(sceneWarning);
+			errorWarning.show();
 		} else {
 			for (int i = 0; i < countAthlete; i++) {
 				athleteInf = driver.getAthleteInf(athletes.get(i).getUserID());
-				border.add(new Text(athleteInf[0]),0,i+1);
-				border.add(new Text(athleteInf[1]),1,i+1);
-				border.add(new Text(athleteInf[2]),2,i+1);
-				border.add(new Text(athleteInf[3]),3,i+1);
-				border.add(new Text(athleteInf[4]),4,i+1);
+				border.add(new Text(athleteInf[0]), 0, i + 1);
+				border.add(new Text(athleteInf[1]), 1, i + 1);
+				border.add(new Text(athleteInf[2]), 2, i + 1);
+				border.add(new Text(athleteInf[3]), 3, i + 1);
+				border.add(new Text(athleteInf[4]), 4, i + 1);
 			}
-		}        
-        finalPoint.setScene(scene);
-        finalPoint.show(); // Display the stage
-	}	
+		}
+		finalPoint.setScene(scene);
+		finalPoint.show(); // Display the stage
+	}
 }
-
 
 class ShowResult implements EventHandler<ActionEvent> {
 
 	ArrayList<Game> games;
 	Driver driver;
 	Stage closeStage;
-	
-	ShowResult (ArrayList<Game> games,Driver driver, Stage closeStage)
-	{
-		this.games=games;
-		this.driver=driver;
-		this.closeStage=closeStage;
+
+	ShowResult(ArrayList<Game> games, Driver driver, Stage closeStage) {
+		this.games = games;
+		this.driver = driver;
+		this.closeStage = closeStage;
 	}
+
 	@Override
 	public void handle(ActionEvent event) {
-		
+
 		closeStage.close();
 		Stage showResult = new Stage();
-		showResult.setTitle("Final Point"); 
-		GridPane  border=new GridPane ();  
+		showResult.setTitle("Final Point");
+		GridPane border = new GridPane();
 		border.setPadding(new Insets(5));
 		border.setHgap(20);
 		border.setVgap(5);
+
         Scene scene=new Scene(border, 500, 400); 
         final Text GameNumber=new Text( "GameNumber: "+games.get(driver.gameIDIndex).getGameID());
         final Text OfficalName=new Text( "OfficalName: "+driver.getOffName(games.get(driver.gameIDIndex).getOfficialID()));
@@ -440,6 +436,7 @@ class ShowResult implements EventHandler<ActionEvent> {
 		 border.add(closeWindow, 2, 0);
         
   
+
 		String[] athleteinf = new String[5];
 		int time = 0;
 		int point = 0;
@@ -450,6 +447,7 @@ class ShowResult implements EventHandler<ActionEvent> {
 
 		for (int i = 0; i < countAthlete; i++) {
 			athleteinf = driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(i));
+
 			time = games.get(driver.gameIDIndex).getResults().get(i);
 			point = games.get(driver.gameIDIndex).getPoints().get(i);
 			border.add(new Text(athleteinf[0]), 0,i+3);
@@ -459,38 +457,39 @@ class ShowResult implements EventHandler<ActionEvent> {
 			border.add(new Text(time+""), 4,i+3);
 			border.add(new Text(point+""), 5,i+3);
 			
+
 		}
-     
+
 		showResult.setScene(scene);
 		showResult.show(); // Display the stage
-	}	
+	}
 }
+
 class ShowFinalResult implements EventHandler<ActionEvent> {
 
 	ArrayList<Game> games;
 	Driver driver;
-	
-	ShowFinalResult(ArrayList<Game> games,Driver driver)
-	{
-		this.driver=driver;
-		this.games=games;
+
+	ShowFinalResult(ArrayList<Game> games, Driver driver) {
+		this.driver = driver;
+		this.games = games;
 	}
-	
+
 	@Override
 	public void handle(ActionEvent event) {
 		int countGame = games.size();
-		
-		Stage showFinalResult = new Stage();
-		showFinalResult.setTitle("Result"); 
 
-		
-		GridPane  border=new GridPane (); 
-	    ScrollPane scrollPane = new ScrollPane();
-	    scrollPane.setContent(border);
-	    
-		border.setPadding(new Insets(5)); 
+		Stage showFinalResult = new Stage();
+		showFinalResult.setTitle("Result");
+
+		GridPane border = new GridPane();
+		ScrollPane scrollPane = new ScrollPane();
+		scrollPane.setContent(border);
+
+		border.setPadding(new Insets(5));
 		border.setHgap(20);
 		border.setVgap(5);
+
 		Scene scene=new Scene(scrollPane,450, 400);         
 		
 		for(int i=0;i<countGame;i++)
@@ -527,6 +526,7 @@ class ShowFinalResult implements EventHandler<ActionEvent> {
 				border.add(new Text(point+""), 5,i*12+j+3);
 	        }
         
+
 		}
 		showFinalResult.setScene(scene);
 		showFinalResult.show(); // Display the stage
