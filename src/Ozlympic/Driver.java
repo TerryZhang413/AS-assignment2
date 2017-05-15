@@ -306,6 +306,43 @@ public class Driver implements SportGame {
 		}
 	}
 
+	public String[] getAthleteInf(String userID) {
+		// Get athlete's information based on userID
+		String[] athleteinf = new String[5];
+		for (Athletes athlete : athletes) {
+			if (athlete.getUserID().equals(userID)) {
+				athleteinf[0] = athlete.getName();
+				athleteinf[1] = String.valueOf(athlete.getAge());
+				athleteinf[2] = athlete.getState();
+				switch (athlete.getAthleteType()) {
+				case 1:
+					athleteinf[3] = "Swimmer";
+					break;
+				case 2:
+					athleteinf[3] = "Cyclist";
+					break;
+				case 3:
+					athleteinf[3] = "Sprinter";
+					break;
+				case 4:
+					athleteinf[3] = "Super Athlete";
+					break;
+				}
+				athleteinf[4] = String.valueOf(athlete.getPoint());
+			}
+		}
+		return athleteinf;
+	}
+
+	public String getOffName(String offID) {
+		// get officer's id based on userID
+		for (Officials official : officials) {
+			if (official.getUserID().equals(offID))
+				return official.getName();
+		}
+		return null;
+	}
+
 	private String getOfficial() {
 		Random ranIndex = new Random();
 		int sizeList;
