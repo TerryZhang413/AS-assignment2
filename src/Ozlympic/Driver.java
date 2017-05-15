@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import Exception.NoGameCreated;
 import Exception.NoRefereeException;
+import Exception.NullResultException;
 import Exception.OutOfGameType;
 import Exception.TooFewAthleteException;
 
@@ -27,8 +28,9 @@ public class Driver implements SportGame {
 		// initialize data from file
 		modifyData = new ModifyData(games, officials, athletes);
 		modifyData.loadData();
+		gameIDIndex = games.size();
 	}
-	
+
 	public void option() {
 		int optionNumber = -1;
 		int a = 1;
@@ -47,32 +49,27 @@ public class Driver implements SportGame {
 					break;
 				case 2:
 					// select a prediction
-					predict(1);
+					setPredict(1);
 					break;
 				case 3:
 					// star a game
-					starGame(gameType);
+					starGame();
 					predictIndex = -1;
 					break;
 				case 4:
 					// display final results
-					showFinalResult();
+					// showFinalResult();
 					break;
 				case 5:
 					// display points of all athletes
-					showFinalPoint();
+					// showFinalPoint();
 					break;
 				case 6:
 					exit();
 					break;
 				default:
-					println("The number must be in 1 to 6!");
-					print("Enter an option:");
 				}
 			} catch (Exception e) {
-				println("Input must be a number!");
-				print("Enter an option:");
-				keyBoard.next();
 			}
 		} while (optionNumber != 6);
 
@@ -90,7 +87,7 @@ public class Driver implements SportGame {
 		return gameList;
 	}
 
-	public boolean starGame(int gameType) {
+	public boolean starGame() {
 		int maxTime = 0, miniTime = 0;
 		int resultCount;
 		ArrayList<Integer> results = new ArrayList<Integer>();
@@ -130,23 +127,10 @@ public class Driver implements SportGame {
 			time = time.substring(0, time.length() - 1);
 			gameInfo.setTime(time);
 			modifyData.addRecord(gameInfo);
-			showResult(gameIDIndex);
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
-	}
-
-	public ArrayList<Integer> getResult() {
-		Game gameInfo = games.get(gameIDIndex);
-		ArrayList<Integer> results = gameInfo.getResults();
-		return results;
-	}
-
-	public ArrayList<Integer> getPoint() {
-		Game gameInfo = games.get(gameIDIndex);
-		ArrayList<Integer> points = gameInfo.getPoints();
-		return points;
 	}
 
 	public Boolean showPredict(ArrayList<Integer> ranks, int predictIndex) {
@@ -221,120 +205,13 @@ public class Driver implements SportGame {
 		return ranks;
 	}
 
-	private void showResult(int index) {
-		String official;
-		String[] athleteinf = new String[5];
-		int time = 0;
-		int point = 0;
-		int countAthlete = 0;
-		if (games.get(index).getResults().size() == 0)
-			return;// game maybe haven't run yet
-		official = getOffName(games.get(index).getOfficialID());
-		countAthlete = games.get(index).getAthletes().size();
-		println("==============================================");
-		println("Game Number: " + games.get(index).getGameID());
-		println("Official: " + official);
-		println("Game: " + games.get(index).getGameID());
-		print("Name", 15);
-		print("Age", 5);
-		print("State", 7);
-		print("Athlete Type", 15);
-		print("Time", 5);
-		println("Rank", 5);
-		for (int i = 0; i < countAthlete; i++) {
-			athleteinf = getAthleteInf( games.get(index).getAthletes().get(i));
-			time =  games.get(index).getResults().get(i);
-			point =  games.get(index).getPoints().get(i);
-
-			print(athleteinf[0], 15);
-			print(athleteinf[1], 5);
-			print(athleteinf[2], 7);
-			print(athleteinf[3], 15);
-			print(time, 5);
-			println(point, 5);
-		}
-	}
-
-	String getOffName(String userID) {
-		// get officer's id based on userID
-		for (Officials official : officials) {
-			if (official.getUserID().equals(userID))
-				return official.getName();
-		}
-		return null;
-	}
-
-	String[] getAthleteInf(String userID) {
-		// Get athlete's information based on userID
-		String[ ] athleteinf = new String[5];
-		for (Athletes athlete : athletes) {
-			if (athlete.getUserID().equals(userID)) {
-				athleteinf[0] = athlete.getName();
-				athleteinf[1] = String.valueOf(athlete.getAge());
-				athleteinf[2] = athlete.getState();
-				switch (athlete.getAthleteType()) {
-				case 1:
-					athleteinf[3] = "Swimmer";
-					break;
-				case 2:
-					athleteinf[3] = "Cyclist";
-					break;
-				case 3:
-					athleteinf[3] = "Sprinter";
-					break;
-				case 4:
-					athleteinf[3] = "Super Athlete";
-					break;
-				}
-				athleteinf[4] = String.valueOf(athlete.getPoint());
-			}
-		}
-		return athleteinf;
-	}
-
-	public void showFinalResult() {
-		// display all of results respectively
-		int countGame =  games.size();
-		if (countGame == 0) {
-			println("No game record!");
-			return;
-		}
-		for (int i = 0; i < countGame; i++) {
-			showResult(i);
-		}
-	}
-
-	protected void showFinalPoint() {
-		// display all of information about athlete
-		String[] athleteInf = new String[5];
-		int countAthlete = 0;
-		print("Name", 15);
-		print("Age", 5);
-		print("State", 7);
-		print("Athlete Type", 15);
-		println("Point", 5);
-		countAthlete = athletes.size();
-		if (countAthlete == 0) {
-			println("Thers isn't any athlete's information;");
-		} else {
-			for (int i = 0; i < countAthlete; i++) {
-				athleteInf = getAthleteInf(athletes.get(i).getUserID());
-				print(athleteInf[0], 15);
-				print(athleteInf[1], 5);
-				print(athleteInf[2], 7);
-				print(athleteInf[3], 15);
-				println(athleteInf[4], 5);
-			}
-		}
-	}
-
 	private int randomTime(int miniTime, int maxTime) {
 		// generate a random time from minimum time to maximum time
 		Random random = new Random();
 		return random.nextInt(maxTime - miniTime + 1) + miniTime;
 	}
 
-   public boolean selectGame(int newGameType) {
+	public boolean selectGame(int newGameType) {
 		// select a game type from 1 to 3
 		try {
 			if ((newGameType < 1) || (newGameType > 3)) {
@@ -349,7 +226,7 @@ public class Driver implements SportGame {
 		} catch (Exception e) {
 			return false;
 		}
-	} 
+	}
 
 	private String getMaxGameID(String gameID, int gameType) {
 		String maxGameID = "null";
@@ -376,7 +253,6 @@ public class Driver implements SportGame {
 			}
 			return maxGameID;
 		} catch (Exception e) {
-			println("Cannn't get maxGameID!");
 			return null;
 		}
 
@@ -407,13 +283,23 @@ public class Driver implements SportGame {
 				throw new NoRefereeException();
 			}
 			if (gameIDIndex != -1) {
-				 games.add(new Game(maxGameID, gameType, officialID, presentAthlete));
-				gameIDIndex =  games.size() - 1;
+				games.add(new Game(maxGameID, gameType, officialID, presentAthlete));
+				gameIDIndex = games.size() - 1;
 			}
 		} catch (Exception e) {
-			println("Cann't create a new game!");
 		}
+	}
 
+	public ArrayList<Game> getGame(boolean getAll) throws NullResultException {
+		if (gameIDIndex == -1)
+			throw new NullResultException();
+		if (getAll)
+			return games;
+		else {
+			ArrayList<Game> lastGame = new ArrayList<Game>(1);
+			lastGame.add(games.get(gameIDIndex - 1));
+			return lastGame;
+		}
 	}
 
 	private String getOfficial() {
@@ -457,80 +343,6 @@ public class Driver implements SportGame {
 		}
 	}
 
-	public void predict(int newIndex) {
-		// set prediction and check if it's legal
-		int athleteCount;
-		if (gameIDIndex == -1) {
-			println("Have to select a game first!");
-			predictIndex = -1;
-			return;
-		} else {
-			showGameInf(gameIDIndex);
-			athleteCount =  games.get(gameIDIndex).getAthletes().size();
-		}
-		print("Choose an athlete:");
-		do {
-			try {
-				newIndex = keyBoard.nextInt();
-				if ((newIndex < 1) || (newIndex > athleteCount)) {
-					println("The number must be in 1 to " + athleteCount + "!");
-					print("Enter an option:");
-					continue;
-				}
-				predictIndex = newIndex - 1;
-			} catch (Exception e) {
-				println("Input must be an integer number!");
-				print("Enter an option:");
-				keyBoard.next();
-			}
-		} while (predictIndex == -1);// -1 means haven't a prediction
-		predictIndex = newIndex;
-	}
-
-	private void showGameInf(int index) {
-		// show game information in prediction menus
-		String athleteName = null;
-		String state = null;
-		String age = null;
-		String athleteType = null;
-		String point = null;
-		print("Name", 15);
-		print("Age", 5);
-		print("State", 7);
-		print("Athlete Type", 15);
-		println("Point", 10);
-		for (String userID : games.get(index).getAthletes()) {
-			for (Athletes athlete :athletes) {
-				if (athlete.getUserID().equals(userID)) {
-					athleteName = athlete.getName();
-					state = athlete.getState();
-					age = String.valueOf(athlete.getAge());
-					switch (athlete.getAthleteType()) {
-					case 1:
-						athleteType = "Swimmer";
-						break;
-					case 2:
-						athleteType = "Cyclist";
-						break;
-					case 3:
-						athleteType = "Sprinter";
-						break;
-					case 4:
-						athleteType = "Super Athlete";
-						break;
-					}
-					point = String.valueOf(athlete.getPoint());
-					break;
-				}
-			}
-			print(athleteName, 15);
-			print(age, 5);
-			print(state, 7);
-			print(athleteType, 15);
-			println(point, 10);
-		}
-	}
-
 	private void refreshPoint(Game gameInfo) {
 		// find top 3 and add point into their documents
 		int resultCount;
@@ -544,43 +356,18 @@ public class Driver implements SportGame {
 		// add point based on users' ID and point
 		int athleteCount;
 		int point = 0;
-		athleteCount =athletes.size();
+		athleteCount = athletes.size();
 		for (int i = 0; i < athleteCount; i++) {
 			if (athleteID == athletes.get(i).getUserID()) {
 				point = athletes.get(i).getPoint() + addPoint;
-				 athletes.get(i).setPoint(point);
+				athletes.get(i).setPoint(point);
 				return;
 			}
 		}
-
 	}
 
-	private void print(String message) {
-		System.out.print(message);
-	}
+	public void setPredict(int newIndex) {
+		predictIndex = newIndex;
 
-	private void print(String message, int length) {
-		message = String.format("%1$-" + length + "s", message);
-		System.out.print(message);
 	}
-
-	private void print(int messageInt, int length) {
-		String message = String.format("%1$-" + length + "s", messageInt);
-		System.out.print(message);
-	}
-
-	private void println(String message) {
-		System.out.println(message);
-	}
-
-	private void println(String message, int length) {
-		message = String.format("%1$-" + length + "s", message);
-		System.out.println(message);
-	}
-
-	private void println(int messageInt, int length) {
-		String message = String.format("%1$-" + length + "s", messageInt);
-		System.out.println(message);
-	}
-
 }

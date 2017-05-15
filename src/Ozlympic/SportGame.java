@@ -2,20 +2,18 @@ package Ozlympic;
 
 import java.util.ArrayList;
 
+import Exception.NullResultException;
+
 public interface SportGame {
 	public boolean selectGame(int gameType);
 
 	public ArrayList<String> showGameList();
 
-	public void predict(int newIndex);
+	public void setPredict(int newIndex);
 
-	public boolean starGame(int gameType);
+	public boolean starGame();
 
-	public void showFinalResult();
-
-	public ArrayList<Integer> getResult();
-
-	public ArrayList<Integer> getPoint();
+	public ArrayList<Game> getGame(boolean getAll) throws NullResultException;
 
 	public void exit();
 }
