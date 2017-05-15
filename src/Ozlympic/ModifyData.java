@@ -262,7 +262,11 @@ public class ModifyData {
 		}
 	}
 
-	public void identifyType(ArrayList<String> participants) {
+	private ArrayList<String> checkParticipants(ArrayList<String> participants) {
+		return participants;
+	}
+
+	private void identifyType(ArrayList<String> participants) {
 		ArrayList<String> personalInfo;
 		for (int i = 0; i < participants.size(); i += 5) {
 			personalInfo = new ArrayList<String>();
@@ -276,7 +280,7 @@ public class ModifyData {
 		}
 	}
 
-	public void loadOfficial(ArrayList<String> newOfficials) {
+	private void loadOfficial(ArrayList<String> newOfficials) {
 		try {
 			this.officials.add(new Officials(newOfficials.get(0), newOfficials.get(2),
 					Integer.valueOf(newOfficials.get(3)), newOfficials.get(4)));
@@ -286,7 +290,7 @@ public class ModifyData {
 		}
 	}
 
-	public void loadAthlete(ArrayList<String> newAthletes) {
+	private void loadAthlete(ArrayList<String> newAthletes) {
 		try {
 			int athleteType = 0;
 			if (newAthletes.get(1).equals("swimmer"))

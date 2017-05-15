@@ -9,8 +9,6 @@ public interface SportGame {
 
 	public ArrayList<String> showGameList();
 
-	public void setPredict(int newIndex);
-
 	public boolean starGame();
 
 	public ArrayList<Game> getGame(boolean getAll) throws NullResultException;

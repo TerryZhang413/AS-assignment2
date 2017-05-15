@@ -15,13 +15,12 @@ import Exception.TooFewAthleteException;
 public class Driver implements SportGame {
 	private Scanner keyBoard = new Scanner(System.in);
 	private ModifyData modifyData;
-	static ArrayList<Athletes> athletes = new ArrayList<Athletes>();
-	static ArrayList<Officials> officials = new ArrayList<Officials>();
-	static ArrayList<Game> games = new ArrayList<Game>();
+	private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
+	private ArrayList<Officials> officials = new ArrayList<Officials>();
+	private ArrayList<Game> games = new ArrayList<Game>();
 	private final int MAX_ATHLETE = 8;// maximum athlete in a game
 	private final int MIN_ATHLETE = 4;// minimum athlete in a game
-	public int gameIDIndex = -1;// the present game index
-	private int predictIndex = -1;
+	private int gameIDIndex = -1;// the present game index
 	private int gameType = -1;
 
 	public Driver() {
@@ -54,7 +53,6 @@ public class Driver implements SportGame {
 				case 3:
 					// star a game
 					starGame();
-					predictIndex = -1;
 					break;
 				case 4:
 					// display final results
@@ -223,7 +221,6 @@ public class Driver implements SportGame {
 			}
 			if (newGameType != gameType)// Type doesn't change
 			{
-				predictIndex = -1;
 				gameType = newGameType;
 			}
 			return true;
@@ -407,8 +404,11 @@ public class Driver implements SportGame {
 		}
 	}
 
-	public void setPredict(int newIndex) {
-		predictIndex = newIndex;
+	public int getGameType() {
+		return gameType;
+	}
 
+	public void setGameType(int gameType) {
+		this.gameType = gameType;
 	}
 }

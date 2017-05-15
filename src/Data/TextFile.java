@@ -13,11 +13,7 @@ public class TextFile {
 			BufferedReader buffReader = new BufferedReader(new FileReader(address));
 			String data = buffReader.readLine();
 			while (data != null) {
-				String[] dataArray = data.split(",");
-				for (String element : dataArray) {
-					element = element.trim();
-					arrayList.add(element);
-				}
+				arrayList.add(data);
 				data = buffReader.readLine();
 			}
 			buffReader.close();
