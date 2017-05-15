@@ -89,17 +89,16 @@ public class Driver implements SportGame {
 		return gameList;
 	}
 
-	public boolean starGame() {
+	public boolean starGame() throws NoGameCreated {
 		int maxTime = 0, miniTime = 0;
 		int resultCount;
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		ArrayList<Integer> ranks = new ArrayList<Integer>();
 		ArrayList<Integer> points = new ArrayList<Integer>();
-
+		if (gameType == -1) {
+			throw new NoGameCreated();
+		}
 		try {
-			if (gameType == -1) {
-				throw new NoGameCreated();
-			}
 			newGame(gameType);
 			switch (gameType) {
 			case 1:

@@ -2,6 +2,7 @@ package Ozlympic;
 
 import java.util.ArrayList;
 
+import Exception.NoGameCreated;
 import Exception.NullResultException;
 
 public interface SportGame {
@@ -9,7 +10,7 @@ public interface SportGame {
 
 	public ArrayList<String> showGameList();
 
-	public boolean starGame();
+	public boolean starGame() throws NoGameCreated;
 
 	public ArrayList<Game> getGame(boolean getAll) throws NullResultException;
 
