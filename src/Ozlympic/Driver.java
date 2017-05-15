@@ -104,16 +104,16 @@ public class Driver implements SportGame {
 			newGame(gameType);
 			switch (gameType) {
 			case 1:
-				miniTime = 10;
-				maxTime = 20;
+				miniTime = 500;
+				maxTime = 800;
 				break;
 			case 2:
 				miniTime = 100;
 				maxTime = 200;
 				break;
 			case 3:
-				miniTime = 500;
-				maxTime = 800;
+				miniTime = 10;
+				maxTime = 20;
 				break;
 			}
 			Game gameInfo = games.get(gameIDIndex);
