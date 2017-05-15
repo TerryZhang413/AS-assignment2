@@ -15,12 +15,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -31,20 +31,12 @@ public class MultiWindow extends Application {
 	
 	private Scanner keyBoard = new Scanner(System.in);
 	private ModifyData modifyData;
-	static ArrayList<Athletes> athletes = new ArrayList<Athletes>();
-	static ArrayList<Officials> officials = new ArrayList<Officials>();
-	static ArrayList<Game> games = new ArrayList<Game>();
 	private final int MAX_ATHLETE = 8;// maximum athlete in a game
 	private final int MIN_ATHLETE = 4;// minimum athlete in a game
 	private int gameIDIndex = -1;// the present game index
 	private int predictIndex = -1;
 
 
-	public MultiWindow() {
-		// initialize data from file
-		modifyData = new ModifyData(games, officials, athletes);
-		modifyData.loadData();
-	}
 	  static int gameType = -1;
 	  static String gameTypeName="Unknown type"; 
 	  static String gameId=null;
@@ -340,7 +332,7 @@ class ShowFinalPoint implements EventHandler<ActionEvent> {
 		border.setPadding(new Insets(5));
 		border.setHgap(20);
 		border.setVgap(5);
-        Scene scene=new Scene(border, 400, 600); 
+        Scene scene=new Scene(border, 400, 550); 
         final Text Name=new Text( "Name");
         final Text Age=new Text("Age");
         final Text State=new Text("State");
@@ -363,8 +355,9 @@ class ShowFinalPoint implements EventHandler<ActionEvent> {
 	    	BorderPane pane=new BorderPane();
 	    	pane.setPadding(new Insets(10,20, 10, 20));
 	    	
-			final ImageView warning = new ImageView(
-	      	      new Image("image/warning.png")
+	    	String imagePath=this.getClass().getResource("/").getFile();
+	    	final ImageView warning = new ImageView(
+	        new Image(imagePath+"image/warning.png")
 	      	    );
 			Button bt1=new Button("Ok");	    	
 	    	Scene sceneWarning = new Scene(pane,350,100);
@@ -491,6 +484,7 @@ class ShowFinalResult implements EventHandler<ActionEvent> {
 		for(int i=0;i<countGame;i++)
 		{
 	        Text GameNumber=new Text( "GameNumber: "+games.get(i).getGameID());
+	        GameNumber.setFill(Color.RED);
 	        Text OfficalName=new Text( "OfficalName: "+driver.getOffName(MultiWindow.games.get(i).getOfficialID()));
 	        final Text Name=new Text( "Name");
 	        final Text Age=new Text("Age");
