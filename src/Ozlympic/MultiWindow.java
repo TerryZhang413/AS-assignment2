@@ -28,19 +28,12 @@ import javafx.util.Duration;
 
 public class MultiWindow extends Application {
 
-	private Scanner keyBoard = new Scanner(System.in);
-	private ModifyData modifyData;
-	private final int MAX_ATHLETE = 8;// maximum athlete in a game
-	private final int MIN_ATHLETE = 4;// minimum athlete in a game
-	private int gameIDIndex = -1;// the present game index
-	private int predictIndex = -1;
-
 	private ArrayList<Game> games;
 	private ArrayList<Athletes> athletes;
 
-	  static int gameType = -1;
-	  static String gameTypeName="Unknown type"; 
-	  static String gameId=null;
+	static int gameType = -1;
+	static String gameTypeName="Unknown type"; 
+	static String gameId=null;
    @Override // Override the start method in the Application class
    public void start(Stage primaryStage) {
 	  
@@ -78,7 +71,7 @@ public class MultiWindow extends Application {
 	//  scene.getStylesheets().add(MultiWindow.class.getResource("login.css").toExternalForm());
 	  primaryStage.show(); // Display the stage
       
-	  GameTypeMenu gtm = new GameTypeMenu(primaryStage);
+	  GameTypeMenu gtm = new GameTypeMenu(primaryStage,driver);
 	  button1.setOnAction(gtm);
 	  RunningGame runGame=new RunningGame(driver,games,primaryStage);
 	  button2.setOnAction(runGame);
@@ -106,9 +99,11 @@ public class MultiWindow extends Application {
 class GameTypeMenu implements EventHandler<ActionEvent> {
 
 	Stage closeStage;
+	Driver driver;
 
-	GameTypeMenu(Stage closeStage) {
+	GameTypeMenu(Stage closeStage, Driver driver) {
 		this.closeStage = closeStage;
+		this.driver=driver;
 	}
 
 	public void handle(ActionEvent e) {
@@ -130,9 +125,9 @@ class GameTypeMenu implements EventHandler<ActionEvent> {
 		pane.getChildren().add(button2);
 		pane.getChildren().add(button3);
 
-		GameType sGame = new GameType(secondMenu, closeStage, "Swimming", 1);
-		GameType cGame = new GameType(secondMenu, closeStage, "Cycling", 2);
-		GameType rGame = new GameType(secondMenu, closeStage, "Running", 3);
+		GameType sGame = new GameType(secondMenu, closeStage, "Swimming", 1,driver);
+		GameType cGame = new GameType(secondMenu, closeStage, "Cycling", 2,driver);
+		GameType rGame = new GameType(secondMenu, closeStage, "Running", 3,driver);
 		button1.setOnAction(sGame);
 		button2.setOnAction(cGame);
 		button3.setOnAction(rGame);
@@ -149,17 +144,19 @@ class GameType implements EventHandler<ActionEvent> {
 	Stage closeStage;
 	Stage reopenStage;
 	int gameType;
+	Driver driver;
 
-	GameType(Stage closeStage, Stage reopenStage, String gameTypeName, int gameType) {
+	GameType(Stage closeStage, Stage reopenStage, String gameTypeName, int gameType, Driver driver) {
 		this.closeStage = closeStage;
 		this.gameTypeName = gameTypeName;
 		this.reopenStage = reopenStage;
 		this.gameType = gameType;
+		this.driver=driver;
 	}
 
 	public void handle(ActionEvent e) {
 		MultiWindow.gameTypeName = gameTypeName;
-		
+		driver.setGameType(gameType);
 		closeStage.close();
 		reopenStage.show();
 	}
@@ -212,7 +209,7 @@ class RunningGame implements EventHandler<ActionEvent> {
         
         final Button showResult=new Button("Show Result");
         border.setBottom(showResult);
-        ShowResult ShowResult=new ShowResult(games,driver,runningGame);
+        ShowResult ShowResult=new ShowResult(gameInfo,driver,runningGame);
         showResult.setOnAction(ShowResult);
     //    final Text Champion=new Text(200, 250, "Champion is Terry");
     //    Champion.visibleProperty();
@@ -382,12 +379,12 @@ class ShowFinalPoint implements EventHandler<ActionEvent> {
 
 class ShowResult implements EventHandler<ActionEvent> {
 
-	ArrayList<Game> games;
+	Game gameInfo;
 	Driver driver;
 	Stage closeStage;
 
-	ShowResult(ArrayList<Game> games, Driver driver, Stage closeStage) {
-		this.games = games;
+	ShowResult(Game gameInfo, Driver driver, Stage closeStage) {
+		this.gameInfo = gameInfo;
 		this.driver = driver;
 		this.closeStage = closeStage;
 	}
@@ -404,8 +401,8 @@ class ShowResult implements EventHandler<ActionEvent> {
 		border.setVgap(5);
 
         Scene scene=new Scene(border, 500, 400); 
-        final Text GameNumber=new Text( "GameNumber: "+games.get(driver.gameIDIndex).getGameID());
-        final Text OfficalName=new Text( "OfficalName: "+driver.getOffName(games.get(driver.gameIDIndex).getOfficialID()));
+        final Text GameNumber=new Text( "GameNumber: "+gameInfo.getGameID());
+        final Text OfficalName=new Text( "OfficalName: "+driver.getOffName(gameInfo.getOfficialID()));
         final Text Name=new Text( "Name");
         final Text Age=new Text("Age");
         final Text State=new Text("State");
@@ -431,15 +428,15 @@ class ShowResult implements EventHandler<ActionEvent> {
 		int time = 0;
 		int point = 0;
 		int countAthlete = 0;
-		if (games.get(driver.gameIDIndex).getResults().size() == 0)
+		if (gameInfo.getResults().size() == 0)
 			return;// game maybe haven't run yet
-		countAthlete = games.get(driver.gameIDIndex).getAthletes().size();
+		countAthlete = gameInfo.getAthletes().size();
 
 		for (int i = 0; i < countAthlete; i++) {
-			athleteinf = driver.getAthleteInf(games.get(driver.gameIDIndex).getAthletes().get(i));
+			athleteinf = driver.getAthleteInf(gameInfo.getAthletes().get(i));
 
-			time = games.get(driver.gameIDIndex).getResults().get(i);
-			point = games.get(driver.gameIDIndex).getPoints().get(i);
+			time = gameInfo.getResults().get(i);
+			point = gameInfo.getPoints().get(i);
 			border.add(new Text(athleteinf[0]), 0,i+3);
 			border.add(new Text(athleteinf[1]), 1,i+3);
 			border.add(new Text(athleteinf[2]), 2,i+3);
