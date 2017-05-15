@@ -48,7 +48,7 @@ public class Driver implements SportGame {
 					break;
 				case 2:
 					// select a prediction
-					setPredict(1);
+					// setPredict(1);
 					break;
 				case 3:
 					// star a game
@@ -298,7 +298,7 @@ public class Driver implements SportGame {
 			return games;
 		else {
 			ArrayList<Game> lastGame = new ArrayList<Game>(1);
-			lastGame.add(games.get(gameIDIndex - 1));
+			lastGame.add(games.get(gameIDIndex));
 			return lastGame;
 		}
 	}

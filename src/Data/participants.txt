@@ -1,5 +1,5 @@
 Oz001,super,JOHN,23,VIC
-Oz002,swimmer,TARY,25,NSW
+,swimmer,TARY,25,NSW
 Oz003,sprinter,CALVIN,21,SA
 Oz004,cyclist,BROWN,28,VIC
 Oz005,super,JONES,31,WA

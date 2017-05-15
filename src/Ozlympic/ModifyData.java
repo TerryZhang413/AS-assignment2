@@ -63,6 +63,7 @@ public class ModifyData {
 		if (participants.size() == 0) {
 			try {
 				participants = tf.readText(classFilePath + athleteFilePath);
+				participants = checkParticipants(participants);
 				identifyType(participants);
 				if (DBexist) {
 					ArrayList<String> type = new ArrayList<String>();
@@ -263,7 +264,27 @@ public class ModifyData {
 	}
 
 	private ArrayList<String> checkParticipants(ArrayList<String> participants) {
-		return participants;
+		ArrayList<String> arrayList = new ArrayList<String>();
+		for (int i = 0; i < participants.size(); i++) {
+			String[] dataArray = participants.get(i).split(",");
+			if (dataArray.length != 5)
+				continue;
+			try {
+				if (!(Integer.valueOf(dataArray[3]) instanceof Integer)) {
+					continue;
+				}
+				if (dataArray[0].length() == 0 || dataArray[1].length() == 0 || dataArray[2].length() == 0
+						|| dataArray[3].length() == 0 || dataArray[4].length() == 0)
+					continue;
+			} catch (Exception e) {
+				continue;
+			}
+			for (String element : dataArray) {
+				element = element.trim();
+				arrayList.add(element);
+			}
+		}
+		return arrayList;
 	}
 
 	private void identifyType(ArrayList<String> participants) {
