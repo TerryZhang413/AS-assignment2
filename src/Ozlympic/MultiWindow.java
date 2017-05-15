@@ -31,8 +31,8 @@ public class MultiWindow extends Application {
 	
 	private Scanner keyBoard = new Scanner(System.in);
 	private ModifyData modifyData;
-	private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
-	private ArrayList<Officials> officials = new ArrayList<Officials>();
+	static ArrayList<Athletes> athletes = new ArrayList<Athletes>();
+	static ArrayList<Officials> officials = new ArrayList<Officials>();
 	static ArrayList<Game> games = new ArrayList<Game>();
 	private final int MAX_ATHLETE = 8;// maximum athlete in a game
 	private final int MIN_ATHLETE = 4;// minimum athlete in a game
@@ -131,8 +131,8 @@ class GameTypeMenu implements EventHandler<ActionEvent> {
 		  pane.getChildren().add(button3);
 		  
 		  GameType sGame = new GameType(secondMenu,closeStage,"Swimming",1);
-		  GameType cGame = new GameType(secondMenu,closeStage,"Cycling",3);
-		  GameType rGame = new GameType(secondMenu,closeStage,"Running",2);
+		  GameType cGame = new GameType(secondMenu,closeStage,"Cycling",2);
+		  GameType rGame = new GameType(secondMenu,closeStage,"Running",3);
 		  button1.setOnAction(sGame);
 		  button2.setOnAction(cGame);
 		  button3.setOnAction(rGame);
@@ -169,7 +169,7 @@ class GameType implements EventHandler<ActionEvent> {
 
 
 class RunningGame implements EventHandler<ActionEvent> {
-	String gameType;
+
 	Driver driver;
 	ArrayList<Game> games;
 	Stage reopenStage;
@@ -184,6 +184,7 @@ class RunningGame implements EventHandler<ActionEvent> {
 
     	
     try{
+    	double coefficient=1;
     	Stage runningGame = new Stage();
         BorderPane border=new BorderPane();  
         Scene scene=new Scene(border, 500, 500);  
@@ -194,10 +195,10 @@ class RunningGame implements EventHandler<ActionEvent> {
         endLine.setStroke(Color.RED);
         Line startLine  = new Line(5, 53,   5,   450);
     	RunningGame rg=new RunningGame(driver,games, reopenStage);
-    	gameType=rg.getGameType();
+    	String gameTypeName=rg.getGameType();
     	
     	final Text official=new Text(100,20,"Offical: "+driver.getOffName(games.get(driver.gameIDIndex).getOfficialID()));
-    	final Text gameName=new Text(250, 20, "Game Type: "+ gameType);
+    	final Text gameName=new Text(250, 20, "Game Type: "+ gameTypeName);
         final Text gameID=new Text(0, 20, "Game ID: "+games.get(driver.gameIDIndex).getGameID());
         final Text text1=new Text(10, 140, driver.getAthleteInf(MultiWindow.games.get(driver.gameIDIndex).getAthletes().get(0))[0]);
         final Text text2=new Text(10, 180, driver.getAthleteInf(MultiWindow.games.get(driver.gameIDIndex).getAthletes().get(1))[0]);
@@ -248,14 +249,20 @@ class RunningGame implements EventHandler<ActionEvent> {
   //      final KeyValue kv9=new KeyValue(Champion.opacityProperty(),1);
   //      final KeyValue kv10=new KeyValue(Champion.opacityProperty(),0);
         final KeyValue kv11=new KeyValue(runner.xProperty(),450);
-        final KeyFrame kf1=new KeyFrame(Duration.millis(1000*games.get(driver.gameIDIndex).getResults().get(0)), kv1);  
-        final KeyFrame kf2=new KeyFrame(Duration.millis(1000*games.get(driver.gameIDIndex).getResults().get(1)), kv2); 
-        final KeyFrame kf3=new KeyFrame(Duration.millis(1000*games.get(driver.gameIDIndex).getResults().get(2)), kv3);  
-        final KeyFrame kf4=new KeyFrame(Duration.millis(1000*games.get(driver.gameIDIndex).getResults().get(3)), kv4);
-        final KeyFrame kf5=new KeyFrame(Duration.millis(1000*games.get(driver.gameIDIndex).getResults().get(4)), kv5);  
-        final KeyFrame kf6=new KeyFrame(Duration.millis(1000*games.get(driver.gameIDIndex).getResults().get(5)), kv6); 
-        final KeyFrame kf7=new KeyFrame(Duration.millis(1000*games.get(driver.gameIDIndex).getResults().get(6)), kv7);  
-        final KeyFrame kf8=new KeyFrame(Duration.millis(1000*games.get(driver.gameIDIndex).getResults().get(7)), kv8);
+        switch(MultiWindow.gameType)
+        {
+        	case 1 :coefficient=0.02;break;
+        	case 2 :coefficient=0.1;break;
+        	case 3 :coefficient=1;break;
+        }
+        final KeyFrame kf1=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(0)), kv1);  
+        final KeyFrame kf2=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(1)), kv2); 
+        final KeyFrame kf3=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(2)), kv3);  
+        final KeyFrame kf4=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(3)), kv4);
+        final KeyFrame kf5=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(4)), kv5);  
+        final KeyFrame kf6=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(5)), kv6); 
+        final KeyFrame kf7=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(6)), kv7);  
+        final KeyFrame kf8=new KeyFrame(Duration.millis(coefficient*1000*games.get(driver.gameIDIndex).getResults().get(7)), kv8);
         final KeyFrame kf11=new KeyFrame(Duration.millis(5000), kv11);
         //将关键帧加到时间轴中  
         timeline.getKeyFrames().addAll(kf1,kf2,kf3,kf4,kf5,kf6,kf7,kf8,kf11);

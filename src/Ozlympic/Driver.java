@@ -14,19 +14,12 @@ import Exception.TooFewAthleteException;
 public class Driver implements SportGame {
 	private Scanner keyBoard = new Scanner(System.in);
 	private ModifyData modifyData;
-	private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
-	private ArrayList<Officials> officials = new ArrayList<Officials>();
 	private final int MAX_ATHLETE = 8;// maximum athlete in a game
 	private final int MIN_ATHLETE = 4;// minimum athlete in a game
 	public int gameIDIndex = -1;// the present game index
 	private int predictIndex = -1;
 	private int gameType = -1;
 
-	public Driver() {
-		// initialize data from file
-		modifyData = new ModifyData(MultiWindow.games, officials, athletes);
-		modifyData.loadData();
-	}
 
 	public void option() {
 		int optionNumber = -1;
@@ -103,16 +96,16 @@ public class Driver implements SportGame {
 			newGame(gameType);
 			switch (gameType) {
 			case 1:
-				miniTime = 10;
-				maxTime = 20;
+				miniTime = 500;
+				maxTime = 800;
 				break;
 			case 2:
 				miniTime = 100;
 				maxTime = 200;
 				break;
 			case 3:
-				miniTime = 500;
-				maxTime = 800;
+				miniTime = 10;
+				maxTime = 20;
 				break;
 			}
 			Game gameInfo = MultiWindow.games.get(gameIDIndex);
@@ -256,7 +249,7 @@ public class Driver implements SportGame {
 
 	String getOffName(String userID) {
 		// get officer's id based on userID
-		for (Officials official : officials) {
+		for (Officials official : MultiWindow.officials) {
 			if (official.getUserID().equals(userID))
 				return official.getName();
 		}
@@ -266,7 +259,7 @@ public class Driver implements SportGame {
 	String[] getAthleteInf(String userID) {
 		// Get athlete's information based on userID
 		String[ ] athleteinf = new String[5];
-		for (Athletes athlete : athletes) {
+		for (Athletes athlete : MultiWindow.athletes) {
 			if (athlete.getUserID().equals(userID)) {
 				athleteinf[0] = athlete.getName();
 				athleteinf[1] = String.valueOf(athlete.getAge());
@@ -312,12 +305,12 @@ public class Driver implements SportGame {
 		print("State", 7);
 		print("Athlete Type", 15);
 		println("Point", 5);
-		countAthlete = athletes.size();
+		countAthlete = MultiWindow.athletes.size();
 		if (countAthlete == 0) {
 			println("Thers isn't any athlete's information;");
 		} else {
 			for (int i = 0; i < countAthlete; i++) {
-				athleteInf = getAthleteInf(athletes.get(i).getUserID());
+				athleteInf = getAthleteInf(MultiWindow.athletes.get(i).getUserID());
 				print(athleteInf[0], 15);
 				print(athleteInf[1], 5);
 				print(athleteInf[2], 7);
@@ -331,7 +324,6 @@ public class Driver implements SportGame {
 		// generate a random time from minimum time to maximum time
 		Random random = new Random();
 		return random.nextInt(maxTime - miniTime + 1) + miniTime;
-
 	}
 
    public boolean selectGame(int newGameType) {
@@ -420,10 +412,10 @@ public class Driver implements SportGame {
 		Random ranIndex = new Random();
 		int sizeList;
 		String officialID = new String();
-		sizeList = officials.size();
+		sizeList = MultiWindow.officials.size();
 		if (sizeList > 0) {
 			sizeList--;
-			officialID = officials.get(ranIndex.nextInt(sizeList)).getUserID();
+			officialID = MultiWindow.officials.get(ranIndex.nextInt(sizeList)).getUserID();
 			getClass();
 			return officialID;
 		} else {
@@ -435,7 +427,7 @@ public class Driver implements SportGame {
 		try {
 			ArrayList<String> temporaryList = new ArrayList<String>();
 			// Finding athletes who are satisfied type of sport.
-			for (Athletes athlete : athletes) {
+			for (Athletes athlete : MultiWindow.athletes) {
 				if ((athlete.getAthleteType() == gameType) || (athlete.getAthleteType() == 4)) {
 					temporaryList.add(athlete.getUserID());
 				}
@@ -500,7 +492,7 @@ public class Driver implements SportGame {
 		print("Athlete Type", 15);
 		println("Point", 10);
 		for (String userID : MultiWindow.games.get(index).getAthletes()) {
-			for (Athletes athlete : athletes) {
+			for (Athletes athlete : MultiWindow.athletes) {
 				if (athlete.getUserID().equals(userID)) {
 					athleteName = athlete.getName();
 					state = athlete.getState();
@@ -544,11 +536,11 @@ public class Driver implements SportGame {
 		// add point based on users' ID and point
 		int athleteCount;
 		int point = 0;
-		athleteCount = athletes.size();
+		athleteCount = MultiWindow.athletes.size();
 		for (int i = 0; i < athleteCount; i++) {
-			if (athleteID == athletes.get(i).getUserID()) {
-				point = athletes.get(i).getPoint() + addPoint;
-				athletes.get(i).setPoint(point);
+			if (athleteID == MultiWindow.athletes.get(i).getUserID()) {
+				point = MultiWindow.athletes.get(i).getPoint() + addPoint;
+				MultiWindow.athletes.get(i).setPoint(point);
 				return;
 			}
 		}
