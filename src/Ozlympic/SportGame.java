@@ -15,5 +15,7 @@ public interface SportGame {
 
 	public ArrayList<Game> getGame(boolean getAll) throws NullResultException;
 
+	public ArrayList<Athletes> getAthelte();
+
 	public void exit();
 }

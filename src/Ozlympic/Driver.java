@@ -79,6 +79,10 @@ public class Driver implements SportGame {
 		System.exit(0);
 	}
 
+	public ArrayList<Athletes> getAthelte() {
+		return athletes;
+	}
+
 	public ArrayList<String> showGameList() {
 		ArrayList<String> gameList = new ArrayList<String>();
 		gameList.add("Swimming");
