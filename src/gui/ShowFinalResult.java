@@ -2,6 +2,7 @@ package gui;
 
 import java.util.ArrayList;
 
+import Exception.NullResultException;
 import Ozlympic.Driver;
 import Ozlympic.Game;
 import javafx.event.ActionEvent;
@@ -16,16 +17,23 @@ import javafx.stage.Stage;
 
 public class ShowFinalResult implements EventHandler<ActionEvent> {
 
-	ArrayList<Game> games;
+	//ArrayList<Game> games;
 	Driver driver;
 
 	ShowFinalResult(ArrayList<Game> games, Driver driver) {
 		this.driver = driver;
-		this.games = games;
+		//this.games = games;
 	}
 
 	@Override
 	public void handle(ActionEvent event) {
+		ArrayList<Game> games = null;
+		try {
+			games = driver.getGame(true);
+		} catch (NullResultException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
 		int countGame = games.size();
 
 		Stage showFinalResult = new Stage();
