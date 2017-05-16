@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import Data.DataBase;
 import Data.TextFile;
+import Exception.NoParticipantDataException;
 import Exception.ReadDataBaseException;
 
 public class ModifyData {
@@ -20,7 +21,8 @@ public class ModifyData {
 	private DataBase db;
 	private TextFile tf;
 
-	public ModifyData(ArrayList<Game> game, ArrayList<Officials> officials, ArrayList<Athletes> athletes) {
+	public ModifyData(ArrayList<Game> game, ArrayList<Officials> officials, ArrayList<Athletes> athletes)
+			throws Exception {
 		this.game = game;
 		this.officials = officials;
 		this.athletes = athletes;
@@ -29,7 +31,7 @@ public class ModifyData {
 		classFilePath = this.getClass().getResource("/").getFile();
 	}
 
-	public void loadData() {
+	public void loadData() throws NoParticipantDataException {
 		ArrayList<String> participants = new ArrayList<String>();
 		ArrayList<String> games = new ArrayList<String>();
 		DBexist = db.checkDB();
@@ -75,13 +77,14 @@ public class ModifyData {
 					db.writeDB("Participant", athelteCols, participants, type);
 				}
 			} catch (IOException e) {
-				System.out.println("Can not find participants.txt");
 			} catch (Exception e) {
-				System.out.println("Cannot create table (Participant)");
 			}
 		} else {
 			identifyType(participants);
 		}
+
+		if (participants.size() == 0)
+			throw new NoParticipantDataException();
 
 		if (games.size() == 0) {
 			try {
@@ -102,7 +105,7 @@ public class ModifyData {
 				// GameRecord.txt doesn't exist, so new one
 				newRecordText(classFilePath + recordFilePath);
 			} catch (Exception e) {
-				System.out.println("Cannot create table (GameRecord)");
+				// System.out.println("Cannot create table (GameRecord)");
 			}
 		} else {
 			initGameRecordDB(games);
@@ -189,7 +192,7 @@ public class ModifyData {
 			writer.close();
 			gameRecord = true;
 		} catch (IOException e) {
-			System.err.println("File cannot be created!");
+			// System.err.println("File cannot be created!");
 			gameRecord = false;
 		}
 	}

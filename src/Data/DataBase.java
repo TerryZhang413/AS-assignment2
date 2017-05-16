@@ -15,7 +15,7 @@ public class DataBase {
 	private Connection connection = null;
 	private ResultSet rs = null;
 
-	public DataBase() {
+	public DataBase() throws Exception {
 		try {
 			hsqlServer = new Server();
 			hsqlServer.setLogWriter(null);
@@ -25,7 +25,7 @@ public class DataBase {
 			Class.forName("org.hsqldb.jdbcDriver");
 			connection = DriverManager.getConnection("jdbc:hsqldb:Ozlympic", "SA", "");
 		} catch (Exception e) {
-			System.out.println("Can not find driver jdbcDriver");
+			throw new Exception("HSQLDB does not existing, has to install first!");
 		}
 	}
 
