@@ -49,10 +49,10 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 	@Override
 	public void handle(ActionEvent event) {
 		MultiWindow.gameTypeName = gameTypeName;
-		driver.setGameType(gameType);
+		driver.selectGame(gameType);
 		closeStage.close();
 		
-
+		
 		
 		Stage selectAthlete = new Stage();
 		selectAthlete.setTitle("Select Athlete");
