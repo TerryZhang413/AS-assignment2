@@ -6,7 +6,6 @@ import Exception.NoParticipantDataException;
 import Exception.NullResultException;
 import Ozlympic.Athletes;
 import Ozlympic.Driver;
-import Ozlympic.Game;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -72,7 +71,6 @@ public class MultiWindow extends Application {
 
 			ShowFinalPoint showFinalPoint = new ShowFinalPoint(driver, athletes);
 			button4.setOnAction(showFinalPoint);
-			// button4.setOnAction((ActionEvent t)->{driver.showFinalPoint();});
 			button5.setOnAction((ActionEvent t) -> {
 				primaryStage.close();
 				System.exit(0);
