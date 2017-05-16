@@ -8,11 +8,11 @@ package Exception;
  * @content when trying to add an athlete to a wrong type of game e.g assigning
  *          a swimmer to a running game.
  */
-public class WrongTypeException extends Exception {
+public class NoThisOfficialException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public WrongTypeException(String gameID) {
-		System.out.println("This athlete (" + gameID + ") can not join Game!");
+	public NoThisOfficialException(String userID) {
+		System.out.println("This official (" + userID + ") does not existing!");
 	}
 }

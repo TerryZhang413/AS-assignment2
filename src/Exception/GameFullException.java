@@ -12,7 +12,7 @@ public class GameFullException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public GameFullException(String gameID) {
-		System.out.println("Game " + gameID + " has too many athlete");
+	public GameFullException() {
+		System.out.println("This game has too many athlete");
 	}
 }
