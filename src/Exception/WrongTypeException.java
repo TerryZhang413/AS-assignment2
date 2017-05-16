@@ -12,7 +12,7 @@ public class WrongTypeException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	public WrongTypeException(String gameID) {
-		System.out.println("This athlete (" + gameID + ") can not join Game!");
+	public WrongTypeException(String userID) {
+		super("This athlete (" + userID + ") can not join Game!");
 	}
 }

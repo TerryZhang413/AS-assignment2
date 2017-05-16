@@ -13,6 +13,6 @@ public class NoGameCreated extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public NoGameCreated() {
-		System.out.println("Does not have any Game! Have to creat one first!");
+		super("Does not have any Game! Have to creat one first!");
 	}
 }

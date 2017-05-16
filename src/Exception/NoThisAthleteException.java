@@ -13,6 +13,6 @@ public class NoThisAthleteException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public NoThisAthleteException(String userID) {
-		System.out.println("This athlete (" + userID + ") does not existing!");
+		super("This athlete (" + userID + ") does not existing!");
 	}
 }

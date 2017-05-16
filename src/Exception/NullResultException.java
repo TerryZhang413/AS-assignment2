@@ -13,6 +13,6 @@ public class NullResultException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public NullResultException() {
-		System.out.println("Do no have any game record now!");
+		super("Do no have any game record now!");
 	}
 }

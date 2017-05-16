@@ -12,6 +12,6 @@ public class OutOfGameType extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public OutOfGameType() {
-		System.out.println("Nonexistent game type!");
+		super("Do no have any game record now!");
 	}
 }
