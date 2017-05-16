@@ -280,8 +280,8 @@ public class Driver implements SportGame {
 		} else {
 			maxGameID = "X00";
 		}
-		if (presentAthlete == null || presentAthlete.size() < MAX_ATHLETE) {// not enough
-																	// athlete
+		if (presentAthlete == null || presentAthlete.size() < MIN_ATHLETE) {
+			// not enough athlete
 			throw new TooFewAthleteException();
 		}
 		if (presentOfficial == null) {// no official
