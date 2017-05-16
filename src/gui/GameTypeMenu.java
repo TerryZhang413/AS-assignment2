@@ -17,7 +17,7 @@ public class GameTypeMenu implements EventHandler<ActionEvent> {
 
 	Stage closeStage;
 	Driver driver;
-	 ArrayList<Athletes> athletes;
+    ArrayList<Athletes> athletes;
 	
 
 	GameTypeMenu(Stage closeStage, Driver driver, ArrayList<Athletes> athletes) {
@@ -45,9 +45,9 @@ public class GameTypeMenu implements EventHandler<ActionEvent> {
 		pane.getChildren().add(button2);
 		pane.getChildren().add(button3);
 
-		SelectAthletes sGame = new SelectAthletes(secondMenu, "Swimming", 1,driver, athletes);
-		SelectAthletes cGame = new SelectAthletes(secondMenu, "Cycling", 2,driver, athletes);
-		SelectAthletes rGame = new SelectAthletes(secondMenu, "Running", 3,driver, athletes);
+		SelectAthletes sGame = new SelectAthletes(secondMenu, "Swimming", 1,driver, athletes,closeStage);
+		SelectAthletes cGame = new SelectAthletes(secondMenu, "Cycling", 2,driver, athletes,closeStage);
+		SelectAthletes rGame = new SelectAthletes(secondMenu, "Running", 3,driver, athletes,closeStage);
 		button1.setOnAction(sGame);
 		button2.setOnAction(cGame);
 		button3.setOnAction(rGame);

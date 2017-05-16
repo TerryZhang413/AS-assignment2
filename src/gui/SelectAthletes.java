@@ -20,6 +20,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -30,14 +35,16 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 	int gameType;
 	Driver driver;
 	ArrayList<Athletes> athletes;
+	Stage reopenMenu;
 	
-	SelectAthletes(Stage closeStage, String gameTypeName, int gameType, Driver driver,ArrayList<Athletes> athletes)
+	SelectAthletes(Stage closeStage, String gameTypeName, int gameType, Driver driver,ArrayList<Athletes> athletes, Stage reopenMenu)
 	{
 		this.closeStage=closeStage;
 		this.driver=driver;
 		this.gameType=gameType;
 		this.gameTypeName=gameTypeName;
 		this.athletes=athletes;
+		this.reopenMenu=reopenMenu;
 	}
 	@Override
 	public void handle(ActionEvent event) {
@@ -59,6 +66,7 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 		pane.setPadding(new Insets(5));
 		pane.setHgap(5);
 		pane.setVgap(0);
+
 		//pane.prefWidth(100);
 
 		final Text Name = new Text("Name");
@@ -130,8 +138,8 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 		Button next=new Button("Next");
 		pane.add(next,3,10);
 		
-		SelectOffical selectoffical=new SelectOffical();
-		//next.setOnAction(selectoffical);
+		SelectOffical selectoffical=new SelectOffical(driver,selectAthlete,reopenMenu);
+		next.setOnAction(selectoffical);
 	//	selectedAthlete.setScene(scene1);
 	//	selectedAthlete.show(); // Display the stage
 		ScrollPane scrollPane = new ScrollPane();
@@ -139,7 +147,10 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 		scrollPane.setContent(border);
 		hbox.getChildren().addAll(scrollPane,pane);
 		
-		Scene scene = new Scene(hbox, 600, 350);
+		Scene scene = new Scene(hbox, 600, 350,Color.LIGHTGRAY);
+	/*	Stop[] stops = new Stop[] { new Stop(0, Color.BLACK), new Stop(1, Color.RED) };
+		LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops);
+		scene.setFill(lg1); */
 		selectAthlete.setScene(scene);
 		selectAthlete.show(); // Display the stage
 	}
@@ -203,7 +214,7 @@ class AddAthlete implements EventHandler<ActionEvent>{
 		} catch (NoThisAthleteException e) {
 	    	Stage errorWarning = new Stage();
 	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text("This athlete is not exist");
+	    	Text warningText=new Text(e.getMessage());
 	    	BorderPane pane=new BorderPane();
 	    	pane.setPadding(new Insets(10,20, 10, 20));
 	    	
@@ -223,7 +234,7 @@ class AddAthlete implements EventHandler<ActionEvent>{
 		} catch (GameFullException e) {
 	    	Stage errorWarning = new Stage();
 	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text("No more than 8 athletes!");
+	    	Text warningText=new Text(e.getMessage());
 	    	BorderPane pane=new BorderPane();
 	    	pane.setPadding(new Insets(10,20, 10, 20));
 	    	
@@ -243,7 +254,7 @@ class AddAthlete implements EventHandler<ActionEvent>{
 		} catch (RepeatAthleteJoinException e) {
 			Stage errorWarning = new Stage();
 	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text("This Athlete has already been added!");
+	    	Text warningText=new Text(e.getMessage());
 	    	BorderPane pane=new BorderPane();
 	    	pane.setPadding(new Insets(10,20, 10, 20));
 	    	

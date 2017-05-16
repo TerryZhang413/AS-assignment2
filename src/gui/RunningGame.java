@@ -3,6 +3,9 @@ package gui;
 import java.util.ArrayList;
 
 import Exception.NoGameCreated;
+import Exception.NoRefereeException;
+import Exception.NullResultException;
+import Exception.TooFewAthleteException;
 import Ozlympic.Driver;
 import Ozlympic.Game;
 import javafx.animation.KeyFrame;
@@ -133,7 +136,7 @@ public class RunningGame implements EventHandler<ActionEvent> {
     {
     	Stage errorWarning = new Stage();
     	errorWarning.setTitle("Warning");
-    	Text warningText=new Text("You need to Select a game firstly!!!");
+    	Text warningText=new Text(e1.getMessage());
     	BorderPane pane=new BorderPane();
     	pane.setPadding(new Insets(10,20, 10, 20));
     	
@@ -150,7 +153,48 @@ public class RunningGame implements EventHandler<ActionEvent> {
     	
     	errorWarning.setScene(sceneWarning); 
     	errorWarning.show();
-    } catch (Exception e1) {
+    } catch (TooFewAthleteException e1) {
+    	Stage errorWarning = new Stage();
+    	errorWarning.setTitle("Warning");
+    	Text warningText=new Text(e1.getMessage());
+    	BorderPane pane=new BorderPane();
+    	pane.setPadding(new Insets(10,20, 10, 20));
+    	
+		final ImageView warning = new ImageView(
+      	      new Image("image/warning.png")
+      	    );
+		Button closeWindow=new Button("Ok");
+		closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
+    	
+    	Scene sceneWarning = new Scene(pane,350,100);
+    	pane.setCenter(warningText);
+    	pane.setLeft(warning);
+    	pane.setBottom(closeWindow);
+    	
+    	errorWarning.setScene(sceneWarning); 
+    	errorWarning.show();
+	} catch (NoRefereeException e1) {
+		Stage errorWarning = new Stage();
+    	errorWarning.setTitle("Warning");
+    	Text warningText=new Text(e1.getMessage());
+    	BorderPane pane=new BorderPane();
+    	pane.setPadding(new Insets(10,20, 10, 20));
+    	
+		final ImageView warning = new ImageView(
+      	      new Image("image/warning.png")
+      	    );
+		Button closeWindow=new Button("Ok");
+		closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
+    	
+    	Scene sceneWarning = new Scene(pane,350,100);
+    	pane.setCenter(warningText);
+    	pane.setLeft(warning);
+    	pane.setBottom(closeWindow);
+    	
+    	errorWarning.setScene(sceneWarning); 
+    	errorWarning.show();
+	} catch (NullResultException e1) {
+		// TODO 自动生成的 catch 块
 		e1.printStackTrace();
 	} 
     
