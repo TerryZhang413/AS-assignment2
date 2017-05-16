@@ -6,17 +6,23 @@ import java.util.Date;
 import java.util.Random;
 import java.util.Scanner;
 
+import Exception.GameFullException;
 import Exception.NoGameCreated;
 import Exception.NoRefereeException;
+import Exception.NoThisAthleteException;
+import Exception.NoThisOfficialException;
 import Exception.NullResultException;
 import Exception.OutOfGameType;
 import Exception.TooFewAthleteException;
+import Exception.WrongTypeException;
 
 public class Driver implements SportGame {
 	private Scanner keyBoard = new Scanner(System.in);
 	private ModifyData modifyData;
 	private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
 	private ArrayList<Officials> officials = new ArrayList<Officials>();
+	private ArrayList<String> presentAthlete = new ArrayList<String>();
+	private String presentOffical = new String();
 	private ArrayList<Game> games = new ArrayList<Game>();
 	private final int MAX_ATHLETE = 8;// maximum athlete in a game
 	private final int MIN_ATHLETE = 4;// minimum athlete in a game
@@ -89,7 +95,7 @@ public class Driver implements SportGame {
 		return gameList;
 	}
 
-	public boolean starGame() throws NoGameCreated {
+	public boolean starGame() throws NoGameCreated, TooFewAthleteException, NoRefereeException {
 		int maxTime = 0, miniTime = 0;
 		int resultCount;
 		ArrayList<Integer> results = new ArrayList<Integer>();
@@ -98,40 +104,38 @@ public class Driver implements SportGame {
 		if (gameType == -1) {
 			throw new NoGameCreated();
 		}
-		try {
-			newGame(gameType);
-			switch (gameType) {
-			case 1:
-				miniTime = 500;
-				maxTime = 800;
-				break;
-			case 2:
-				miniTime = 100;
-				maxTime = 200;
-				break;
-			case 3:
-				miniTime = 10;
-				maxTime = 20;
-				break;
-			}
-			Game gameInfo = games.get(gameIDIndex);
-			resultCount = gameInfo.getAthletes().size();
-			for (int i = 0; i < resultCount; i++) {
-				results.add(randomTime(miniTime, maxTime));
-			}
-			gameInfo.setResults(results);
-			ranks = rank(gameInfo);
-			points = calPoint(ranks);
-			gameInfo.setPoints(points);
-			refreshPoint(gameInfo);
-			String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
-			time = time.substring(0, time.length() - 1);
-			gameInfo.setTime(time);
-			modifyData.addRecord(gameInfo);
-			return true;
-		} catch (Exception e) {
-			return false;
+
+		newGame(gameType);
+		switch (gameType) {
+		case 1:
+			miniTime = 500;
+			maxTime = 800;
+			break;
+		case 2:
+			miniTime = 100;
+			maxTime = 200;
+			break;
+		case 3:
+			miniTime = 10;
+			maxTime = 20;
+			break;
 		}
+		Game gameInfo = games.get(gameIDIndex);
+		resultCount = gameInfo.getAthletes().size();
+		for (int i = 0; i < resultCount; i++) {
+			results.add(randomTime(miniTime, maxTime));
+		}
+		gameInfo.setResults(results);
+		ranks = rank(gameInfo);
+		points = calPoint(ranks);
+		gameInfo.setPoints(points);
+		refreshPoint(gameInfo);
+		String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
+		time = time.substring(0, time.length() - 1);
+		gameInfo.setTime(time);
+		modifyData.addRecord(gameInfo);
+		presentAthlete = new ArrayList<String>();// clear athlete list
+		return true;
 	}
 
 	public Boolean showPredict(ArrayList<Integer> ranks, int predictIndex) {
@@ -221,6 +225,8 @@ public class Driver implements SportGame {
 			if (newGameType != gameType)// Type doesn't change
 			{
 				gameType = newGameType;
+				presentAthlete = new ArrayList<String>();
+				presentOffical = new String();
 			}
 			return true;
 		} catch (Exception e) {
@@ -258,36 +264,64 @@ public class Driver implements SportGame {
 
 	}
 
-	private void newGame(int gameType) {
-		String maxGameID = "null";
+	private void newGame(int gameType) throws TooFewAthleteException, NoRefereeException {
+		String maxGameID;
 		String officialID;
-		ArrayList<String> presentAthlete = new ArrayList<String>();
-		gameIDIndex = games.size();
+		int gameIDIndex = games.size();
 		if (games.size() > 0) {
 			maxGameID = games.get(gameIDIndex - 1).getGameID();
-		}
-		if (maxGameID.equals("null")) {
+		} else {
 			maxGameID = "X00";
-			gameIDIndex = 0;
+		}
+		if (presentAthlete == null || presentAthlete.size() < 4) {
+			throw new TooFewAthleteException();
+		}
+		if (presentOffical == null) {
+			throw new NoRefereeException();
 		}
 		try {
 			maxGameID = getMaxGameID(maxGameID, gameType);
 			presentAthlete = getAthlete(gameType);
 			officialID = getOfficial();
-			if (presentAthlete == null) {
-				gameIDIndex = -1;
-				throw new TooFewAthleteException();
-			}
-			if (officialID == null) {
-				gameIDIndex = -1;
-				throw new NoRefereeException();
-			}
-			if (gameIDIndex != -1) {
-				games.add(new Game(maxGameID, gameType, officialID, presentAthlete));
-				gameIDIndex = games.size() - 1;
-			}
+			games.add(new Game(maxGameID, gameType, officialID, presentAthlete));
+			gameIDIndex = games.size() - 1;
+
 		} catch (Exception e) {
 		}
+	}
+
+	public boolean addOfficial(String officialID) throws NoThisOfficialException {
+		boolean find = false;
+		for (Officials official : officials) {
+			if (official.getUserID().equals(officialID)) {
+				presentOffical = officialID;
+			}
+		}
+		if (find)
+			return true;
+		else
+			throw new NoThisOfficialException(officialID);
+	}
+
+	public boolean addAthlete(String athleteID) throws WrongTypeException, NoThisAthleteException, GameFullException {
+		boolean find = false;
+		if (presentAthlete.size() == 8)
+			throw new GameFullException();
+		for (Athletes athlete : athletes) {
+			if (athlete.getUserID().equals(athleteID)) {
+				if ((athlete.getAthleteType() == gameType) || (athlete.getAthleteType() == 4)) {
+					presentAthlete.add(athlete.getUserID());
+					find = true;
+					break;
+				} else {
+					throw new WrongTypeException(athleteID);
+				}
+			}
+		}
+		if (find)
+			return true;
+		else
+			throw new NoThisAthleteException(athleteID);
 	}
 
 	public ArrayList<Game> getGame(boolean getAll) throws NullResultException {
