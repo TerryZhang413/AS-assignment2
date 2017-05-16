@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.hsqldb.server.Server;
 
+import Exception.NoneDBConnectionException;
 import Exception.ReadDataBaseException;
 
 public class DataBase {
@@ -15,7 +16,7 @@ public class DataBase {
 	private Connection connection = null;
 	private ResultSet rs = null;
 
-	public DataBase() throws Exception {
+	public DataBase() throws NoneDBConnectionException {
 		try {
 			hsqlServer = new Server();
 			hsqlServer.setLogWriter(null);
@@ -25,7 +26,7 @@ public class DataBase {
 			Class.forName("org.hsqldb.jdbcDriver");
 			connection = DriverManager.getConnection("jdbc:hsqldb:Ozlympic", "SA", "");
 		} catch (Exception e) {
-			throw new Exception("HSQLDB does not existing, has to install first!");
+			throw new NoneDBConnectionException();
 		}
 	}
 

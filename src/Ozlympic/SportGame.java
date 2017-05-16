@@ -18,5 +18,4 @@ public interface SportGame {
 
 	public ArrayList<Athletes> getAthelte();
 
-	public void exit();
 }

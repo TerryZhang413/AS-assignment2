@@ -12,6 +12,7 @@ import Exception.NoParticipantDataException;
 import Exception.NoRefereeException;
 import Exception.NoThisAthleteException;
 import Exception.NoThisOfficialException;
+import Exception.NoneDBConnectionException;
 import Exception.NullResultException;
 import Exception.OutOfGameType;
 import Exception.RepeatAthleteJoinException;
@@ -31,59 +32,12 @@ public class Driver implements SportGame {
 	private int gameIDIndex = -1;// the present game index
 	private int gameType = -1;
 
-	public Driver() throws NoParticipantDataException, Exception {
+	public Driver() throws NoParticipantDataException, NoneDBConnectionException {
 		// initialize data from file
 		modifyData = new ModifyData(games, officials, athletes);
 		modifyData.loadData();
 		if (games.size() > 0)
 			gameIDIndex = games.size() - 1;
-	}
-
-	public void option() {
-		int optionNumber = -1;
-		int a = 1;
-		Menus menus = new Menus();
-		do {
-			menus.mainMenus();
-			try {
-				optionNumber = keyBoard.nextInt();
-				switch (optionNumber) {
-				case 1:
-					// select a game type
-					selectGame(a);
-					a++;
-					if (a == 4)
-						a = 1;
-					break;
-				case 2:
-					// select a prediction
-					// setPredict(1);
-					break;
-				case 3:
-					// star a game
-					starGame();
-					break;
-				case 4:
-					// display final results
-					// showFinalResult();
-					break;
-				case 5:
-					// display points of all athletes
-					// showFinalPoint();
-					break;
-				case 6:
-					exit();
-					break;
-				default:
-				}
-			} catch (Exception e) {
-			}
-		} while (optionNumber != 6);
-
-	}
-
-	public void exit() {
-		System.exit(0);
 	}
 
 	public ArrayList<Athletes> getAthelte() {
@@ -141,14 +95,6 @@ public class Driver implements SportGame {
 		gameInfo.setTime(time);
 		modifyData.addRecord(gameInfo);
 		return true;
-	}
-
-	public Boolean showPredict(ArrayList<Integer> ranks, int predictIndex) {
-		if (predictIndex != -1) {
-			if (ranks.get(predictIndex - 1) == 1)
-				return true;
-		}
-		return false;
 	}
 
 	private ArrayList<Integer> calPoint(ArrayList<Integer> ranks) {
