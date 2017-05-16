@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import Exception.GameFullException;
 import Exception.NoGameCreated;
+import Exception.NoParticipantDataException;
 import Exception.NoRefereeException;
 import Exception.NoThisAthleteException;
 import Exception.NoThisOfficialException;
@@ -30,7 +31,7 @@ public class Driver implements SportGame {
 	private int gameIDIndex = -1;// the present game index
 	private int gameType = -1;
 
-	public Driver() {
+	public Driver() throws NoParticipantDataException, Exception {
 		// initialize data from file
 		modifyData = new ModifyData(games, officials, athletes);
 		modifyData.loadData();
@@ -85,10 +86,12 @@ public class Driver implements SportGame {
 	}
 
 	public ArrayList<Athletes> getAthelte() {
+		// get all athlete information
 		return athletes;
 	}
 
 	public ArrayList<String> showGameList() {
+		// get all game type;
 		ArrayList<String> gameList = new ArrayList<String>();
 		gameList.add("Swimming");
 		gameList.add("Cycling");
@@ -97,12 +100,13 @@ public class Driver implements SportGame {
 	}
 
 	public boolean starGame() throws NoGameCreated, TooFewAthleteException, NoRefereeException {
+		// star running a new game
 		int maxTime = 0, miniTime = 0;
 		int resultCount;
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		ArrayList<Integer> ranks = new ArrayList<Integer>();
 		ArrayList<Integer> points = new ArrayList<Integer>();
-		if (gameType == -1) {
+		if (gameType == -1) {//
 			throw new NoGameCreated();
 		}
 
@@ -221,6 +225,8 @@ public class Driver implements SportGame {
 	public boolean selectGame(int newGameType) {
 		// select a game type from 1 to 3
 		try {
+			presentAthlete = new ArrayList<String>();// clear athlete list
+			presentOfficial = new String();
 			if ((newGameType < 1) || (newGameType > 3)) {
 				throw new OutOfGameType();
 			}
@@ -266,18 +272,19 @@ public class Driver implements SportGame {
 	}
 
 	private void newGame(int gameType) throws TooFewAthleteException, NoRefereeException {
+		// create a new Game Class as a new game
 		String maxGameID;
-		String officialID;
 		int gameIDIndex = games.size();
 		if (games.size() > 0) {
 			maxGameID = games.get(gameIDIndex - 1).getGameID();
 		} else {
 			maxGameID = "X00";
 		}
-		if (presentAthlete == null || presentAthlete.size() < 4) {
+		if (presentAthlete == null || presentAthlete.size() < 4) {// not enough
+																	// athlete
 			throw new TooFewAthleteException();
 		}
-		if (presentOfficial == null) {
+		if (presentOfficial == null) {// no official
 			throw new NoRefereeException();
 		}
 		try {
@@ -290,10 +297,12 @@ public class Driver implements SportGame {
 	}
 
 	public boolean addOfficial(String officialID) throws NoThisOfficialException {
+		// choose a official
 		boolean find = false;
 		for (Officials official : officials) {
 			if (official.getUserID().equals(officialID)) {
 				presentOfficial = officialID;
+				find = true;
 			}
 		}
 		if (find)
@@ -303,24 +312,31 @@ public class Driver implements SportGame {
 	}
 
 	public ArrayList<Officials> getOfficialList() {
+		// return all official information
 		return officials;
 	}
 
 	public ArrayList<String> getPresentAthlete() {
+		// return athletes who join this game now
 		return presentAthlete;
 	}
 
 	public boolean addAthlete(String athleteID)
 			throws WrongTypeException, NoThisAthleteException, GameFullException, RepeatAthleteJoinException {
+		// add athlete in game
 		boolean find = false;
+		// check how many athlete already join game
 		if (presentAthlete.size() == 8)
 			throw new GameFullException();
+		// check weather this athlete already join this game
 		for (String checkID : presentAthlete) {
 			if (checkID.equals(athleteID))
 				throw new RepeatAthleteJoinException(athleteID);
 		}
+		// find athlete by user ID
 		for (Athletes athlete : athletes) {
 			if (athlete.getUserID().equals(athleteID)) {
+				// check athlete type
 				if ((athlete.getAthleteType() == gameType) || (athlete.getAthleteType() == 4)) {
 					presentAthlete.add(athlete.getUserID());
 					find = true;
@@ -337,6 +353,7 @@ public class Driver implements SportGame {
 	}
 
 	public ArrayList<Game> getGame(boolean getAll) throws NullResultException {
+		// get game information
 		if (gameIDIndex == -1)
 			throw new NullResultException();
 		if (getAll)
@@ -383,47 +400,6 @@ public class Driver implements SportGame {
 				return official.getName();
 		}
 		return null;
-	}
-
-	private String getOfficial() {
-		Random ranIndex = new Random();
-		int sizeList;
-		String officialID = new String();
-		sizeList = officials.size();
-		if (sizeList > 0) {
-			sizeList--;
-			officialID = officials.get(ranIndex.nextInt(sizeList)).getUserID();
-			getClass();
-			return officialID;
-		} else {
-			return null;
-		}
-	}
-
-	private ArrayList<String> getAthlete(int gameType) {
-		try {
-			ArrayList<String> temporaryList = new ArrayList<String>();
-			// Finding athletes who are satisfied type of sport.
-			for (Athletes athlete : athletes) {
-				if ((athlete.getAthleteType() == gameType) || (athlete.getAthleteType() == 4)) {
-					temporaryList.add(athlete.getUserID());
-				}
-			}
-			if (temporaryList.size() <= MIN_ATHLETE) {
-				// no enough athletes
-				return null;
-			} else {
-				Random ranIndex = new Random();
-				int sizeList;
-				while (temporaryList.size() > MAX_ATHLETE) {
-					sizeList = temporaryList.size() - 1;
-					temporaryList.remove(ranIndex.nextInt(sizeList));
-				}
-				return temporaryList;
-			}
-		} catch (Exception e) {
-			return null;
-		}
 	}
 
 	private void refreshPoint(Game gameInfo) {
