@@ -28,12 +28,10 @@ import javafx.util.Duration;
 public class RunningGame implements EventHandler<ActionEvent> {
 
 	Driver driver;
-	ArrayList<Game> games;
 	Stage reopenStage;
 
-	RunningGame(Driver driver, ArrayList<Game> games, Stage reopenStage) {
+	RunningGame(Driver driver, Stage reopenStage) {
 		this.driver = driver;
-		this.games = games; 
 		this.reopenStage = reopenStage;
 	}
 

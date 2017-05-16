@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 
 public class MultiWindow extends Application {
 
-	private ArrayList<Game> games;
+	//private ArrayList<Game> games;
 	private ArrayList<Athletes> athletes;
 
 	static int gameType = -1;
@@ -34,7 +34,7 @@ public class MultiWindow extends Application {
 		Driver driver;
 		try {
 			driver = new Driver();
-			games = driver.getGame(true);
+			//games = driver.getGame(true);
 			athletes = driver.getAthelte();
 
 			primaryStage.setTitle("Ozlympic Game"); // Set the stage title
@@ -64,10 +64,10 @@ public class MultiWindow extends Application {
 
 			GameTypeMenu gtm = new GameTypeMenu(primaryStage, driver, athletes);
 			button1.setOnAction(gtm);
-			RunningGame runGame = new RunningGame(driver, games, primaryStage);
+			RunningGame runGame = new RunningGame(driver, primaryStage);
 			button2.setOnAction(runGame);
 
-			ShowFinalResult sfr = new ShowFinalResult(games, driver);
+			ShowFinalResult sfr = new ShowFinalResult(driver);
 			button3.setOnAction(sfr);
 
 			ShowFinalPoint showFinalPoint = new ShowFinalPoint(driver, athletes);
