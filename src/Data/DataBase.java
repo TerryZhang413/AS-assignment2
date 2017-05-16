@@ -25,6 +25,7 @@ public class DataBase {
 			hsqlServer.setDatabasePath(0, "file:MYDB");
 			Class.forName("org.hsqldb.jdbcDriver");
 			connection = DriverManager.getConnection("jdbc:hsqldb:Ozlympic", "SA", "");
+			throw new NoneDBConnectionException();
 		} catch (Exception e) {
 			throw new NoneDBConnectionException();
 		}

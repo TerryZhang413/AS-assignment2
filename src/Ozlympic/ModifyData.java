@@ -22,14 +22,21 @@ public class ModifyData {
 	private DataBase db;
 	private TextFile tf;
 
-	public ModifyData(ArrayList<Game> game, ArrayList<Officials> officials, ArrayList<Athletes> athletes)
-			throws NoneDBConnectionException {
+	public ModifyData(ArrayList<Game> game, ArrayList<Officials> officials, ArrayList<Athletes> athletes) {
+		classFilePath = this.getClass().getResource("/").getFile();
 		this.game = game;
 		this.officials = officials;
 		this.athletes = athletes;
-		db = new DataBase();
 		tf = new TextFile();
-		classFilePath = this.getClass().getResource("/").getFile();
+		try {
+			db = new DataBase();
+		} catch (NoneDBConnectionException e) {
+			DBexist = false;
+		}
+	}
+
+	public boolean getDBexist() {
+		return DBexist;
 	}
 
 	public void loadData() throws NoParticipantDataException {
