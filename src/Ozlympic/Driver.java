@@ -35,7 +35,8 @@ public class Driver implements SportGame {
 		// initialize data from file
 		modifyData = new ModifyData(games, officials, athletes);
 		modifyData.loadData();
-		gameIDIndex = games.size();
+		if (games.size() > 0)
+			gameIDIndex = games.size();
 	}
 
 	public void option() {
@@ -272,9 +273,8 @@ public class Driver implements SportGame {
 	private void newGame(int gameType) throws TooFewAthleteException, NoRefereeException {
 		// create a new Game Class as a new game
 		String maxGameID;
-		int gameIDIndex = games.size();
-		if (games.size() > 0) {
-			maxGameID = games.get(gameIDIndex - 1).getGameID();
+		if (gameIDIndex >= 0) {
+			maxGameID = games.get(gameIDIndex).getGameID();
 		} else {
 			maxGameID = "X00";
 		}
@@ -288,7 +288,6 @@ public class Driver implements SportGame {
 		try {
 			maxGameID = getMaxGameID(maxGameID, gameType);
 			games.add(new Game(maxGameID, gameType, presentOfficial, presentAthlete));
-			gameIDIndex = games.size() - 1;
 
 		} catch (Exception e) {
 		}
