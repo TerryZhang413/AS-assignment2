@@ -36,7 +36,7 @@ public class Driver implements SportGame {
 		modifyData = new ModifyData(games, officials, athletes);
 		modifyData.loadData();
 		if (games.size() > 0)
-			gameIDIndex = games.size();
+			gameIDIndex = games.size() - 1;
 	}
 
 	public void option() {
@@ -351,8 +351,8 @@ public class Driver implements SportGame {
 
 	public ArrayList<Game> getGame(boolean getAll) throws NullResultException {
 		// get game information
-		if (gameIDIndex == -1)
-			throw new NullResultException();
+		// if (gameIDIndex == -1)
+		// throw new NullResultException();
 		if (getAll)
 			return games;
 		else {
