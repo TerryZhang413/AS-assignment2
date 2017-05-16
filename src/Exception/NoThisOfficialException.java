@@ -13,6 +13,6 @@ public class NoThisOfficialException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	public NoThisOfficialException(String userID) {
-		System.out.println("This official (" + userID + ") does not existing!");
+		super("This official (" + userID + ") does not existing!");
 	}
 }

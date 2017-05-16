@@ -13,6 +13,7 @@ import Exception.NoThisAthleteException;
 import Exception.NoThisOfficialException;
 import Exception.NullResultException;
 import Exception.OutOfGameType;
+import Exception.RepeatAthleteJoinException;
 import Exception.TooFewAthleteException;
 import Exception.WrongTypeException;
 
@@ -307,10 +308,15 @@ public class Driver implements SportGame {
 		return presentAthlete;
 	}
 
-	public boolean addAthlete(String athleteID) throws WrongTypeException, NoThisAthleteException, GameFullException {
+	public boolean addAthlete(String athleteID)
+			throws WrongTypeException, NoThisAthleteException, GameFullException, RepeatAthleteJoinException {
 		boolean find = false;
 		if (presentAthlete.size() == 8)
 			throw new GameFullException();
+		for (String checkID : presentAthlete) {
+			if (checkID.equals(athleteID))
+				throw new RepeatAthleteJoinException(athleteID);
+		}
 		for (Athletes athlete : athletes) {
 			if (athlete.getUserID().equals(athleteID)) {
 				if ((athlete.getAthleteType() == gameType) || (athlete.getAthleteType() == 4)) {
