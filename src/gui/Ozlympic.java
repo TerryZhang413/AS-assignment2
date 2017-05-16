@@ -3,6 +3,7 @@ package gui;
 import java.util.ArrayList;
 
 import Exception.NoParticipantDataException;
+import Exception.NoneDBConnectionException;
 import Ozlympic.Athletes;
 import Ozlympic.Driver;
 import javafx.application.Application;
@@ -47,7 +48,7 @@ public class Ozlympic extends Application {
 				errorWarning.close();
 			});
 
-			Scene sceneWarning = new Scene(pane, 350, 100);
+			Scene sceneWarning = new Scene(pane, 500, 100);
 			pane.setCenter(warningText);
 			pane.setLeft(warning);
 			pane.setBottom(closeWindow);
@@ -95,6 +96,30 @@ public class Ozlympic extends Application {
 			primaryStage.close();
 			System.exit(0);
 		});
+		
+		try {
+			driver.checkDB();
+		} catch (NoneDBConnectionException e) {
+			Stage errorWarning = new Stage();
+			errorWarning.setTitle("Warning");
+			Text warningText = new Text(e.getMessage());
+			BorderPane border = new BorderPane();
+			border.setPadding(new Insets(10, 20, 10, 20));
+
+			final ImageView warning = new ImageView(new Image("image/warning.png"));
+			Button closeWindow = new Button("Ok");
+			closeWindow.setOnAction((ActionEvent t) -> {
+				errorWarning.close();
+			});
+
+			Scene sceneWarning = new Scene(border, 550, 100);
+			border.setCenter(warningText);
+			border.setLeft(warning);
+			border.setBottom(closeWindow);
+
+			errorWarning.setScene(sceneWarning);
+			errorWarning.show();
+		}
 	}
 
 	public static void main(String[] args) {
