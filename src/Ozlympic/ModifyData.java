@@ -30,6 +30,7 @@ public class ModifyData {
 		tf = new TextFile();
 		try {
 			db = new DataBase();
+			DBexist = true;
 		} catch (NoneDBConnectionException e) {
 			DBexist = false;
 		}
