@@ -3,7 +3,6 @@ package gui;
 import java.util.ArrayList;
 
 import Exception.NoParticipantDataException;
-import Exception.NullResultException;
 import Ozlympic.Athletes;
 import Ozlympic.Driver;
 import javafx.application.Application;
@@ -20,7 +19,7 @@ import javafx.stage.Stage;
 
 public class MultiWindow extends Application {
 
-	//private ArrayList<Game> games;
+	// private ArrayList<Game> games;
 	private ArrayList<Athletes> athletes;
 
 	static int gameType = -1;
@@ -33,7 +32,7 @@ public class MultiWindow extends Application {
 		Driver driver;
 		try {
 			driver = new Driver();
-			//games = driver.getGame(true);
+			// games = driver.getGame(true);
 			athletes = driver.getAthelte();
 
 			primaryStage.setTitle("Ozlympic Game"); // Set the stage title
@@ -75,66 +74,46 @@ public class MultiWindow extends Application {
 				primaryStage.close();
 				System.exit(0);
 			});
-		} catch (NullResultException e) {
-			Stage errorWarning = new Stage();
-	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text(e.getMessage());
-	    	BorderPane pane=new BorderPane();
-	    	pane.setPadding(new Insets(10,20, 10, 20));
-	    	
-			final ImageView warning = new ImageView(
-	      	      new Image("image/warning.png")
-	      	    );
-			Button closeWindow=new Button("Ok");
-			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
-	    	
-	    	Scene sceneWarning = new Scene(pane,350,100);
-	    	pane.setCenter(warningText);
-	    	pane.setLeft(warning);
-	    	pane.setBottom(closeWindow);
-	    	
-	    	errorWarning.setScene(sceneWarning); 
-	    	errorWarning.show();
 		} catch (NoParticipantDataException e) {
 			Stage errorWarning = new Stage();
-	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text(e.getMessage());
-	    	BorderPane pane=new BorderPane();
-	    	pane.setPadding(new Insets(10,20, 10, 20));
-	    	
-			final ImageView warning = new ImageView(
-	      	      new Image("image/warning.png")
-	      	    );
-			Button closeWindow=new Button("Ok");
-			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
-	    	
-	    	Scene sceneWarning = new Scene(pane,350,100);
-	    	pane.setCenter(warningText);
-	    	pane.setLeft(warning);
-	    	pane.setBottom(closeWindow);
-	    	
-	    	errorWarning.setScene(sceneWarning); 
-	    	errorWarning.show();
+			errorWarning.setTitle("Warning");
+			Text warningText = new Text(e.getMessage());
+			BorderPane pane = new BorderPane();
+			pane.setPadding(new Insets(10, 20, 10, 20));
+
+			final ImageView warning = new ImageView(new Image("image/warning.png"));
+			Button closeWindow = new Button("Ok");
+			closeWindow.setOnAction((ActionEvent t) -> {
+				errorWarning.close();
+			});
+
+			Scene sceneWarning = new Scene(pane, 350, 100);
+			pane.setCenter(warningText);
+			pane.setLeft(warning);
+			pane.setBottom(closeWindow);
+
+			errorWarning.setScene(sceneWarning);
+			errorWarning.show();
 		} catch (Exception e) {
 			Stage errorWarning = new Stage();
-	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text(e.getMessage());
-	    	BorderPane pane=new BorderPane();
-	    	pane.setPadding(new Insets(10,20, 10, 20));
-	    	
-			final ImageView warning = new ImageView(
-	      	      new Image("image/warning.png")
-	      	    );
-			Button closeWindow=new Button("Ok");
-			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
-	    	
-	    	Scene sceneWarning = new Scene(pane,350,100);
-	    	pane.setCenter(warningText);
-	    	pane.setLeft(warning);
-	    	pane.setBottom(closeWindow);
-	    	
-	    	errorWarning.setScene(sceneWarning); 
-	    	errorWarning.show();
+			errorWarning.setTitle("Warning");
+			Text warningText = new Text(e.getMessage());
+			BorderPane pane = new BorderPane();
+			pane.setPadding(new Insets(10, 20, 10, 20));
+
+			final ImageView warning = new ImageView(new Image("image/warning.png"));
+			Button closeWindow = new Button("Ok");
+			closeWindow.setOnAction((ActionEvent t) -> {
+				errorWarning.close();
+			});
+
+			Scene sceneWarning = new Scene(pane, 350, 100);
+			pane.setCenter(warningText);
+			pane.setLeft(warning);
+			pane.setBottom(closeWindow);
+
+			errorWarning.setScene(sceneWarning);
+			errorWarning.show();
 		}
 
 	}

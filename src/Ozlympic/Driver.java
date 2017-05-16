@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
-import java.util.Scanner;
 
 import Exception.GameFullException;
 import Exception.NoGameCreated;
@@ -20,7 +19,6 @@ import Exception.TooFewAthleteException;
 import Exception.WrongTypeException;
 
 public class Driver implements SportGame {
-	private Scanner keyBoard = new Scanner(System.in);
 	private ModifyData modifyData;
 	private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
 	private ArrayList<Officials> officials = new ArrayList<Officials>();
@@ -31,13 +29,23 @@ public class Driver implements SportGame {
 	private final int MIN_ATHLETE = 4;// minimum athlete in a game
 	private int gameIDIndex = -1;// the present game index
 	private int gameType = -1;
+	private boolean DBexist;
 
-	public Driver() throws NoParticipantDataException, NoneDBConnectionException {
+	public Driver() throws NoParticipantDataException {
 		// initialize data from file
 		modifyData = new ModifyData(games, officials, athletes);
 		modifyData.loadData();
 		if (games.size() > 0)
 			gameIDIndex = games.size() - 1;
+		DBexist = modifyData.getDBexist();
+	}
+
+	public boolean checkDB() throws NoneDBConnectionException {
+		if (DBexist)
+			return DBexist;
+		else
+			throw new NoneDBConnectionException();
+
 	}
 
 	public ArrayList<Athletes> getAthelte() {
@@ -64,8 +72,9 @@ public class Driver implements SportGame {
 		if (gameType == -1) {//
 			throw new NoGameCreated();
 		}
-
+		// generate a new game, add it to game list
 		newGame(gameType);
+		// generate max&min time based on game type
 		switch (gameType) {
 		case 1:
 			miniTime = 500;
@@ -82,6 +91,7 @@ public class Driver implements SportGame {
 		}
 		Game gameInfo = games.get(++gameIDIndex);
 		resultCount = gameInfo.getAthletes().size();
+		// generate results randomly
 		for (int i = 0; i < resultCount; i++) {
 			results.add(randomTime(miniTime, maxTime));
 		}
