@@ -70,7 +70,6 @@ public class MultiWindow extends Application {
 
 			ShowFinalPoint showFinalPoint = new ShowFinalPoint(driver, athletes);
 			button4.setOnAction(showFinalPoint);
-			// button4.setOnAction((ActionEvent t)->{driver.showFinalPoint();});
 			button5.setOnAction((ActionEvent t) -> {
 				primaryStage.close();
 				System.exit(0);
