@@ -280,7 +280,7 @@ public class Driver implements SportGame {
 		} else {
 			maxGameID = "X00";
 		}
-		if (presentAthlete == null || presentAthlete.size() < 4) {// not enough
+		if (presentAthlete == null || presentAthlete.size() < MAX_ATHLETE) {// not enough
 																	// athlete
 			throw new TooFewAthleteException();
 		}
@@ -326,7 +326,7 @@ public class Driver implements SportGame {
 		// add athlete in game
 		boolean find = false;
 		// check how many athlete already join game
-		if (presentAthlete.size() == 8)
+		if (presentAthlete.size() == MAX_ATHLETE)
 			throw new GameFullException();
 		// check weather this athlete already join this game
 		for (String checkID : presentAthlete) {
