@@ -125,7 +125,7 @@ public class Driver implements SportGame {
 			maxTime = 20;
 			break;
 		}
-		Game gameInfo = games.get(gameIDIndex);
+		Game gameInfo = games.get(++gameIDIndex);
 		resultCount = gameInfo.getAthletes().size();
 		for (int i = 0; i < resultCount; i++) {
 			results.add(randomTime(miniTime, maxTime));
