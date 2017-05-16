@@ -3,8 +3,6 @@ package gui;
 import java.util.ArrayList;
 
 import Exception.NoParticipantDataException;
-import Exception.NoneDBConnectionException;
-import Exception.NullResultException;
 import Ozlympic.Athletes;
 import Ozlympic.Driver;
 import javafx.application.Application;
@@ -21,7 +19,7 @@ import javafx.stage.Stage;
 
 public class Ozlympic extends Application {
 
-	//private ArrayList<Game> games;
+	// private ArrayList<Game> games;
 	private ArrayList<Athletes> athletes;
 
 	static int gameType = -1;
@@ -31,54 +29,32 @@ public class Ozlympic extends Application {
 	@Override // Override the start method in the Application class
 	public void start(Stage primaryStage) {
 
-		 
+		Driver driver = null;
 		try {
-			Driver driver = new Driver();
+			driver = new Driver();
 			athletes = driver.getAthelte();
-			
+
 		} catch (NoParticipantDataException e) {
 			Stage errorWarning = new Stage();
-	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text(e.getMessage());
-	    	BorderPane pane=new BorderPane();
-	    	pane.setPadding(new Insets(10,20, 10, 20));
-	    	
-			final ImageView warning = new ImageView(
-	      	      new Image("image/warning.png")
-	      	    );
-			Button closeWindow=new Button("Ok");
-			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
-	    	
-	    	Scene sceneWarning = new Scene(pane,350,100);
-	    	pane.setCenter(warningText);
-	    	pane.setLeft(warning);
-	    	pane.setBottom(closeWindow);
-	    	
-	    	errorWarning.setScene(sceneWarning); 
-	    	errorWarning.show();
-		} catch (NoneDBConnectionException e) {
-			Stage errorWarning = new Stage();
-	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text(e.getMessage());
-	    	BorderPane pane=new BorderPane();
-	    	pane.setPadding(new Insets(10,20, 10, 20));
-	    	
-			final ImageView warning = new ImageView(
-	      	      new Image("image/warning.png")
-	      	    );
-			Button closeWindow=new Button("Ok");
-			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
-	    	
-	    	Scene sceneWarning = new Scene(pane,350,100);
-	    	pane.setCenter(warningText);
-	    	pane.setLeft(warning);
-	    	pane.setBottom(closeWindow);
-	    	
-	    	errorWarning.setScene(sceneWarning); 
-	    	errorWarning.show();
-	    	
-		} 
-		
+			errorWarning.setTitle("Warning");
+			Text warningText = new Text(e.getMessage());
+			BorderPane pane = new BorderPane();
+			pane.setPadding(new Insets(10, 20, 10, 20));
+
+			final ImageView warning = new ImageView(new Image("image/warning.png"));
+			Button closeWindow = new Button("Ok");
+			closeWindow.setOnAction((ActionEvent t) -> {
+				errorWarning.close();
+			});
+
+			Scene sceneWarning = new Scene(pane, 350, 100);
+			pane.setCenter(warningText);
+			pane.setLeft(warning);
+			pane.setBottom(closeWindow);
+
+			errorWarning.setScene(sceneWarning);
+			errorWarning.show();
+		}
 
 		primaryStage.setTitle("Ozlympic Game"); // Set the stage title
 		VBox pane = new VBox();

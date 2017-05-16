@@ -42,7 +42,6 @@ public class ModifyData {
 	public void loadData() throws NoParticipantDataException {
 		ArrayList<String> participants = new ArrayList<String>();
 		ArrayList<String> games = new ArrayList<String>();
-		DBexist = db.checkDB();
 
 		ArrayList<String> athelteCols = new ArrayList<String>(5);
 		athelteCols.add("ID");

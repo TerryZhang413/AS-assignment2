@@ -53,15 +53,6 @@ public class Driver implements SportGame {
 		return athletes;
 	}
 
-	public ArrayList<String> showGameList() {
-		// get all game type;
-		ArrayList<String> gameList = new ArrayList<String>();
-		gameList.add("Swimming");
-		gameList.add("Cycling");
-		gameList.add("Running");
-		return gameList;
-	}
-
 	public boolean starGame() throws NoGameCreated, TooFewAthleteException, NoRefereeException {
 		// star running a new game
 		int maxTime = 0, miniTime = 0;
