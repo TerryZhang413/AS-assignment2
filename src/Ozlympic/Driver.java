@@ -303,6 +303,10 @@ public class Driver implements SportGame {
 			throw new NoThisOfficialException(officialID);
 	}
 
+	public ArrayList<String> getPresentAthlete() {
+		return presentAthlete;
+	}
+
 	public boolean addAthlete(String athleteID) throws WrongTypeException, NoThisAthleteException, GameFullException {
 		boolean find = false;
 		if (presentAthlete.size() == 8)
