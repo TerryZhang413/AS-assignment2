@@ -23,7 +23,7 @@ public class GameType implements EventHandler<ActionEvent> {
 
 	public void handle(ActionEvent e) {
 		MultiWindow.gameTypeName = gameTypeName;
-		driver.setGameType(gameType);
+		driver.selectGame(gameType);
 		closeStage.close();
 		reopenStage.show();
 	}

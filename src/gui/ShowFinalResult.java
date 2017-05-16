@@ -17,23 +17,23 @@ import javafx.stage.Stage;
 
 public class ShowFinalResult implements EventHandler<ActionEvent> {
 
-	//ArrayList<Game> games;
+	ArrayList<Game> games;
 	Driver driver;
 
 	ShowFinalResult(ArrayList<Game> games, Driver driver) {
 		this.driver = driver;
-		//this.games = games;
+		this.games = games;
 	}
 
 	@Override
 	public void handle(ActionEvent event) {
-		ArrayList<Game> games = null;
-		try {
-			games = driver.getGame(true);
-		} catch (NullResultException e) {
-			// TODO 自动生成的 catch 块
-			e.printStackTrace();
-		}
+		//ArrayList<Game> games = null;
+	//	try {
+		//	games = driver.getGame(true);
+		//} catch (NullResultException e) {
+	//		// TODO 自动生成的 catch 块
+	//		e.printStackTrace();
+	//	}
 		int countGame = games.size();
 
 		Stage showFinalResult = new Stage();
@@ -48,7 +48,7 @@ public class ShowFinalResult implements EventHandler<ActionEvent> {
 		border.setVgap(5);
 
 		Scene scene=new Scene(scrollPane,450, 400);         
-		
+		int countAthlete=0;
 		for(int i=0;i<countGame;i++)
 		{
 	        Text GameNumber=new Text( "GameNumber: "+games.get(i).getGameID());
@@ -60,28 +60,29 @@ public class ShowFinalResult implements EventHandler<ActionEvent> {
 	        final Text AthleteType=new Text("Athlete Type");
 	        final Text Time=new Text("Time");
 	        final Text Point=new Text("Point");
-	        border.add(GameNumber, 0, i*12+0);
-	        border.add(OfficalName, 0, i*12+1);
-	        border.add(Name, 0, i*12+2);
-	        border.add(Age, 1, i*12+2);
-	        border.add(State, 2, i*12+2);
-	        border.add(AthleteType, 3, i*12+2);
-	        border.add(Time, 4, i*12+2);
-	        border.add(Point, 5, i*12+2);
-	
-	        int countAthlete=games.get(i).getAthletes().size();
+	        border.add(GameNumber, 0, i*countAthlete+0);
+	        border.add(OfficalName, 0, i*countAthlete+1);
+	        border.add(Name, 0, i*countAthlete+2);
+	        border.add(Age, 1, i*countAthlete+2);
+	        border.add(State, 2, i*countAthlete+2);
+	        border.add(AthleteType, 3, i*countAthlete+2);
+	        border.add(Time, 4, i*countAthlete+2);
+	        border.add(Point, 5, i*countAthlete+2);
+	        
+	         countAthlete=games.get(i).getAthletes().size();
 	        for(int j=0;j<countAthlete;j++)
 	        {
 	    		String[] athleteinf = driver.getAthleteInf(games.get(i).getAthletes().get(j));
 	        	int time = games.get(i).getResults().get(j);
 				int point = games.get(i).getPoints().get(j);
-				border.add(new Text(athleteinf[0]), 0,i*12+j+3);
-				border.add(new Text(athleteinf[1]), 1,i*12+j+3);
-				border.add(new Text(athleteinf[2]), 2,i*12+j+3);
-				border.add(new Text(athleteinf[3]), 3,i*12+j+3);
-				border.add(new Text(time+""), 4,i*12+j+3);
-				border.add(new Text(point+""), 5,i*12+j+3);
+				border.add(new Text(athleteinf[0]), 0,i*countAthlete+j+3);
+				border.add(new Text(athleteinf[1]), 1,i*countAthlete+j+3);
+				border.add(new Text(athleteinf[2]), 2,i*countAthlete+j+3);
+				border.add(new Text(athleteinf[3]), 3,i*countAthlete+j+3);
+				border.add(new Text(time+""), 4,i*countAthlete+j+3);
+				border.add(new Text(point+""), 5,i*countAthlete+j+3);
 	        }
+	        countAthlete+=4;
 		}
 		showFinalResult.setScene(scene);
 		showFinalResult.show(); // Display the stage
