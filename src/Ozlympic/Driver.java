@@ -23,7 +23,7 @@ public class Driver implements SportGame {
 	private ArrayList<Athletes> athletes = new ArrayList<Athletes>();
 	private ArrayList<Officials> officials = new ArrayList<Officials>();
 	private ArrayList<String> presentAthlete = new ArrayList<String>();
-	private String presentOffical = new String();
+	private String presentOfficial = new String();
 	private ArrayList<Game> games = new ArrayList<Game>();
 	private final int MAX_ATHLETE = 8;// maximum athlete in a game
 	private final int MIN_ATHLETE = 4;// minimum athlete in a game
@@ -136,6 +136,7 @@ public class Driver implements SportGame {
 		gameInfo.setTime(time);
 		modifyData.addRecord(gameInfo);
 		presentAthlete = new ArrayList<String>();// clear athlete list
+		presentOfficial = new String();
 		return true;
 	}
 
@@ -227,7 +228,7 @@ public class Driver implements SportGame {
 			{
 				gameType = newGameType;
 				presentAthlete = new ArrayList<String>();
-				presentOffical = new String();
+				presentOfficial = new String();
 			}
 			return true;
 		} catch (Exception e) {
@@ -262,7 +263,6 @@ public class Driver implements SportGame {
 		} catch (Exception e) {
 			return null;
 		}
-
 	}
 
 	private void newGame(int gameType) throws TooFewAthleteException, NoRefereeException {
@@ -277,14 +277,12 @@ public class Driver implements SportGame {
 		if (presentAthlete == null || presentAthlete.size() < 4) {
 			throw new TooFewAthleteException();
 		}
-		if (presentOffical == null) {
+		if (presentOfficial == null) {
 			throw new NoRefereeException();
 		}
 		try {
 			maxGameID = getMaxGameID(maxGameID, gameType);
-			presentAthlete = getAthlete(gameType);
-			officialID = getOfficial();
-			games.add(new Game(maxGameID, gameType, officialID, presentAthlete));
+			games.add(new Game(maxGameID, gameType, presentOfficial, presentAthlete));
 			gameIDIndex = games.size() - 1;
 
 		} catch (Exception e) {
@@ -295,13 +293,17 @@ public class Driver implements SportGame {
 		boolean find = false;
 		for (Officials official : officials) {
 			if (official.getUserID().equals(officialID)) {
-				presentOffical = officialID;
+				presentOfficial = officialID;
 			}
 		}
 		if (find)
 			return true;
 		else
 			throw new NoThisOfficialException(officialID);
+	}
+
+	public ArrayList<Officials> getOfficialList() {
+		return officials;
 	}
 
 	public ArrayList<String> getPresentAthlete() {
