@@ -48,7 +48,7 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 	}
 	@Override
 	public void handle(ActionEvent event) {
-		MultiWindow.gameTypeName = gameTypeName;
+		Ozlympic.gameTypeName = gameTypeName;
 		driver.selectGame(gameType);
 		closeStage.close();
 		

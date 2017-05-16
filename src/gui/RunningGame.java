@@ -202,10 +202,10 @@ public class RunningGame implements EventHandler<ActionEvent> {
 
 	public String getGameType() throws Exception {
 		String gameType = "Unknown type";
-		if (MultiWindow.gameTypeName.equals("Unknown type")) {
+		if (Ozlympic.gameTypeName.equals("Unknown type")) {
 			throw new NoGameCreated();
 		} else
-			gameType = MultiWindow.gameTypeName;
+			gameType = Ozlympic.gameTypeName;
 		return gameType;
 	}
 }
