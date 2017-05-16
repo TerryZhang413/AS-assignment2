@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import Data.DataBase;
 import Data.TextFile;
 import Exception.NoParticipantDataException;
+import Exception.NoneDBConnectionException;
 import Exception.ReadDataBaseException;
 
 public class ModifyData {
@@ -22,7 +23,7 @@ public class ModifyData {
 	private TextFile tf;
 
 	public ModifyData(ArrayList<Game> game, ArrayList<Officials> officials, ArrayList<Athletes> athletes)
-			throws Exception {
+			throws NoneDBConnectionException {
 		this.game = game;
 		this.officials = officials;
 		this.athletes = athletes;
