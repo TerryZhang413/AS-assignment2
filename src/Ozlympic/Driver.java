@@ -139,8 +139,6 @@ public class Driver implements SportGame {
 		time = time.substring(0, time.length() - 1);
 		gameInfo.setTime(time);
 		modifyData.addRecord(gameInfo);
-		presentAthlete = new ArrayList<String>();// clear athlete list
-		presentOfficial = new String();
 		return true;
 	}
 
