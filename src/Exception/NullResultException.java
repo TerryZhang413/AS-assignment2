@@ -5,8 +5,7 @@ package Exception;
 
 /**
  * @author Yipeng Zhang
- * @content when trying to add an athlete to a game which already has 8 athletes
- *          registered
+ * @content no result recored can be returned
  */
 public class NullResultException extends Exception {
 

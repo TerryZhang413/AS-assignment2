@@ -8,12 +8,13 @@ import Exception.NoRefereeException;
 import Exception.NoThisAthleteException;
 import Exception.NoThisOfficialException;
 import Exception.NullResultException;
+import Exception.OutOfGameType;
 import Exception.RepeatAthleteJoinException;
 import Exception.TooFewAthleteException;
 import Exception.WrongTypeException;
 
 public interface SportGame {
-	public boolean selectGame(int gameType);
+	public boolean selectGame(int gameType) throws OutOfGameType;
 
 	public boolean starGame() throws NoGameCreated, TooFewAthleteException, NoRefereeException;
 

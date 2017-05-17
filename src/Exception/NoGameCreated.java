@@ -5,8 +5,7 @@ package Exception;
 
 /**
  * @author Yipeng Zhang
- * @content when trying to add an athlete to a game which already has 8 athletes
- *          registered
+ * @content when trying to star a game but no game has been created
  */
 public class NoGameCreated extends Exception {
 

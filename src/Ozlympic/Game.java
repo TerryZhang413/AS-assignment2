@@ -1,5 +1,9 @@
 package Ozlympic;
 
+/**
+ * @author Yipeng Zhang
+ * @content Game object storing Game information
+ */
 import java.util.ArrayList;
 
 public class Game {

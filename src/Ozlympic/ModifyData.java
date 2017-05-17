@@ -1,5 +1,10 @@
 package Ozlympic;
 
+/**
+ * @author Yipeng Zhang
+ * @content this class is used to involve method in database or textfile class
+ * or translate data form between database and textfile
+ */
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;

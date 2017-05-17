@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +12,7 @@ import Exception.GameFullException;
 import Exception.NoThisAthleteException;
 import Exception.RepeatAthleteJoinException;
 import Exception.WrongTypeException;
+import Ozlympic.Athletes;
 import Ozlympic.Driver;
 
 public class AddAthleteTest {
@@ -21,16 +24,12 @@ public class AddAthleteTest {
 		driver.setGameType(1);
 	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
-
 	@Test
 	public void testAddAthlete1()
 			throws WrongTypeException, NoThisAthleteException, GameFullException, RepeatAthleteJoinException {
 		driver.addAthlete("Oz001");
 		String athleteID = driver.getPresentAthlete().get(0);
-		assertEquals("Oz002", athleteID);
+		assertEquals("Oz001", athleteID);
 	}
 
 	@Test
@@ -57,8 +56,17 @@ public class AddAthleteTest {
 	public void testAddAthlete5()
 			throws WrongTypeException, NoThisAthleteException, GameFullException, RepeatAthleteJoinException {
 		driver.addAthlete("Oz002");
-		String athleteID = driver.getPresentAthlete().get(1);
-		assertEquals("Oz002", athleteID);
+		driver.addAthlete("Oz002");
+	}
+
+	@Test(expected = GameFullException.class)
+	public void testAddAthlete6()
+			throws WrongTypeException, NoThisAthleteException, GameFullException, RepeatAthleteJoinException {
+		ArrayList<Athletes> athletes = driver.getAthelte();
+		for (Athletes athlete : athletes) {
+			if (athlete.getAthleteType() == 1 || athlete.getAthleteType() == 4)
+				driver.addAthlete(athlete.getUserID());
+		}
 	}
 
 }

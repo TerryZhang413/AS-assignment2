@@ -5,8 +5,7 @@ package Exception;
 
 /**
  * @author Yipeng Zhang
- * @content when trying to add an athlete to a wrong type of game e.g assigning
- *          a swimmer to a running game.
+ * @content add a nonexistent athlete
  */
 public class NoThisAthleteException extends Exception {
 

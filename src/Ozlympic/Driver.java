@@ -1,6 +1,12 @@
 package Ozlympic;
 
+/**
+ * @author Yipeng Zhang
+ * @content Main class. including most of functions
+ */
+
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -168,24 +174,20 @@ public class Driver implements SportGame {
 		return random.nextInt(maxTime - miniTime + 1) + miniTime;
 	}
 
-	public boolean selectGame(int newGameType) {
+	public boolean selectGame(int newGameType) throws OutOfGameType {
 		// select a game type from 1 to 3
-		try {
-			presentAthlete = new ArrayList<String>();// clear athlete list
-			presentOfficial = new String();
-			if ((newGameType < 1) || (newGameType > 3)) {
-				throw new OutOfGameType();
-			}
-			if (newGameType != gameType)// Type doesn't change
-			{
-				gameType = newGameType;
-				presentAthlete = new ArrayList<String>();
-				presentOfficial = new String();
-			}
-			return true;
-		} catch (Exception e) {
-			return false;
+		presentAthlete = new ArrayList<String>();// clear athlete list
+		presentOfficial = new String();
+		if ((newGameType < 1) || (newGameType > 3)) {
+			throw new OutOfGameType();
 		}
+		if (newGameType != gameType)// Type doesn't change
+		{
+			gameType = newGameType;
+			presentAthlete = new ArrayList<String>();
+			presentOfficial = new String();
+		}
+		return true;
 	}
 
 	private String getMaxGameID(String gameID, int gameType) {
@@ -229,7 +231,8 @@ public class Driver implements SportGame {
 			// not enough athlete
 			throw new TooFewAthleteException();
 		}
-		if (presentOfficial == null) {// no official
+		if (presentOfficial == null || presentOfficial.length() == 0) {
+			// no official
 			throw new NoRefereeException();
 		}
 		try {
