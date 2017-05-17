@@ -1,5 +1,10 @@
 package gui;
 
+/**
+ * @author Yanjie Zhang
+ * @content after the real-time simulation,show the result of this game.
+ * 
+ */
 import Ozlympic.Driver;
 import Ozlympic.Game;
 import javafx.event.ActionEvent;
@@ -17,6 +22,7 @@ class ShowResult implements EventHandler<ActionEvent> {
 	Driver driver;
 	Stage closeStage;
 
+	//constructor to get data from last stage
 	ShowResult(Game gameInfo, Driver driver, Stage closeStage) {
 		this.gameInfo = gameInfo;
 		this.driver = driver;
@@ -25,7 +31,7 @@ class ShowResult implements EventHandler<ActionEvent> {
 
 	@Override
 	public void handle(ActionEvent event) {
-
+		//close last stage
 		closeStage.close();
 		Stage showResult = new Stage();
 		showResult.setTitle("Final Point");
@@ -33,7 +39,7 @@ class ShowResult implements EventHandler<ActionEvent> {
 		border.setPadding(new Insets(5));
 		border.setHgap(20);
 		border.setVgap(5);
-
+		//show the result of this game
         Scene scene=new Scene(border, 500, 400); 
         final Text GameNumber=new Text( "GameNumber: "+gameInfo.getGameID());
         final Text OfficalName=new Text( "OfficalName: "+driver.getOffName(gameInfo.getOfficialID()));
@@ -56,8 +62,6 @@ class ShowResult implements EventHandler<ActionEvent> {
 		closeWindow.setOnAction((ActionEvent t)->{showResult.close();});
 		 border.add(closeWindow, 2, 0);
         
-  
-
 		String[] athleteinf = new String[5];
 		int time = 0;
 		int point = 0;
@@ -68,7 +72,7 @@ class ShowResult implements EventHandler<ActionEvent> {
 
 		for (int i = 0; i < countAthlete; i++) {
 			athleteinf = driver.getAthleteInf(gameInfo.getAthletes().get(i));
-
+			//show every athlete's information
 			time = gameInfo.getResults().get(i);
 			point = gameInfo.getPoints().get(i);
 			border.add(new Text(athleteinf[0]), 0,i+3);
@@ -77,8 +81,6 @@ class ShowResult implements EventHandler<ActionEvent> {
 			border.add(new Text(athleteinf[3]), 3,i+3);
 			border.add(new Text(time+""), 4,i+3);
 			border.add(new Text(point+""), 5,i+3);
-			
-
 		}
 
 		showResult.setScene(scene);

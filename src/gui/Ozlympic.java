@@ -1,5 +1,11 @@
 package gui;
 
+/**
+ * @author Yanjie Zhang
+ * @content show the primary stage for the basic menu
+ * 
+ */
+
 import java.util.ArrayList;
 
 import Exception.NoParticipantDataException;
@@ -30,15 +36,15 @@ public class Ozlympic extends Application {
 	@Override // Override the start method in the Application class
 	public void start(Stage primaryStage) {
 
-		Driver driver = null;
+		Driver driver = null; //create a new object 
 		try {
 			driver = new Driver();
-			athletes = driver.getAthelte();
-
+			athletes = driver.getAthelte(); //get the athlete list
 		} catch (NoParticipantDataException e) {
-			Stage errorWarning = new Stage();
+			//show the error stage
+			Stage errorWarning = new Stage();  
 			errorWarning.setTitle("Warning");
-			Text warningText = new Text(e.getMessage());
+			Text warningText = new Text(e.getMessage());  //show error message on screen
 			BorderPane pane = new BorderPane();
 			pane.setPadding(new Insets(10, 20, 10, 20));
 
@@ -60,7 +66,7 @@ public class Ozlympic extends Application {
 		primaryStage.setTitle("Ozlympic Game"); // Set the stage title
 		VBox pane = new VBox();
 		pane.setPadding(new Insets(50, 100, 50, 100));
-		pane.setSpacing(10);
+		pane.setSpacing(10);//set the spacing
 
 		// Create a scene and place a button in the scene
 		pane.getChildren().add(new Text("Ozlympic Game"));
@@ -81,24 +87,26 @@ public class Ozlympic extends Application {
 		primaryStage.setScene(scene); // Place the scene in the stage
 		// scene.getStylesheets().add(MultiWindow.class.getResource("login.css").toExternalForm());
 		primaryStage.show(); // Display the stage
-
+		//event to choose game type
 		GameTypeMenu gtm = new GameTypeMenu(primaryStage, driver, athletes);
 		button1.setOnAction(gtm);
+		//event to run a new game
 		RunningGame runGame = new RunningGame(driver, primaryStage);
 		button2.setOnAction(runGame);
-
+		//event to show result of all games
 		ShowFinalResult sfr = new ShowFinalResult(driver);
 		button3.setOnAction(sfr);
-
+		//event to show all athlete's points
 		ShowFinalPoint showFinalPoint = new ShowFinalPoint(driver, athletes);
 		button4.setOnAction(showFinalPoint);
+		//event to end the program
 		button5.setOnAction((ActionEvent t) -> {
 			primaryStage.close();
 			System.exit(0);
 		});
 		
 		try {
-			driver.checkDB();
+			driver.checkDB();  //check if there is a db and catch the exception
 		} catch (NoneDBConnectionException e) {
 			Stage errorWarning = new Stage();
 			errorWarning.setTitle("Warning");
@@ -123,8 +131,8 @@ public class Ozlympic extends Application {
 	}
 
 	public static void main(String[] args) {
-		Application.setUserAgentStylesheet(STYLESHEET_CASPIAN);
-		Application.launch(args);
+		Application.setUserAgentStylesheet(STYLESHEET_CASPIAN);// set the style
+		Application.launch(args); 							   //run the program
 	}
 
 }
