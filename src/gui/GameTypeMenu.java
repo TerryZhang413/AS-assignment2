@@ -1,5 +1,10 @@
 package gui;
 
+/**
+ * @author Yanjie Zhang
+ * @content show the game type menu to guide user choose game type
+ * 
+ */
 import java.util.ArrayList;
 
 import Ozlympic.Athletes;
@@ -19,7 +24,7 @@ public class GameTypeMenu implements EventHandler<ActionEvent> {
 	Driver driver;
     ArrayList<Athletes> athletes;
 	
-
+    //constructor to get data from last stage
 	GameTypeMenu(Stage closeStage, Driver driver, ArrayList<Athletes> athletes) {
 		this.closeStage = closeStage;
 		this.driver=driver;
@@ -27,7 +32,7 @@ public class GameTypeMenu implements EventHandler<ActionEvent> {
 	}
 
 	public void handle(ActionEvent e) {
-		closeStage.close();
+		closeStage.close(); //close basic menu
 		Stage secondMenu = new Stage(); // Create a new stage
 		secondMenu.setTitle("secondMenu"); // Set the stage title
 		// Set a scene with a button in the stage
@@ -45,6 +50,7 @@ public class GameTypeMenu implements EventHandler<ActionEvent> {
 		pane.getChildren().add(button2);
 		pane.getChildren().add(button3);
 
+		//event to finish selecting game type and then select athletes
 		SelectAthletes sGame = new SelectAthletes(secondMenu, "Swimming", 1,driver, athletes,closeStage);
 		SelectAthletes cGame = new SelectAthletes(secondMenu, "Cycling", 2,driver, athletes,closeStage);
 		SelectAthletes rGame = new SelectAthletes(secondMenu, "Running", 3,driver, athletes,closeStage);

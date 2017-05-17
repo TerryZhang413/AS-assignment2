@@ -1,5 +1,9 @@
 package gui;
-
+/**
+ * @author Yanjie Zhang
+ * @content user select athletes in this menu
+ * 
+ */
 import java.util.ArrayList;
 
 import Exception.GameFullException;
@@ -37,6 +41,7 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 	ArrayList<Athletes> athletes;
 	Stage reopenMenu;
 	
+	//constructor to get data from last stage
 	SelectAthletes(Stage closeStage, String gameTypeName, int gameType, Driver driver,ArrayList<Athletes> athletes, Stage reopenMenu)
 	{
 		this.closeStage=closeStage;
@@ -50,25 +55,22 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 	public void handle(ActionEvent event) {
 		Ozlympic.gameTypeName = gameTypeName;
 		driver.selectGame(gameType);
-		closeStage.close();
-		
-		
+		closeStage.close();	
 		
 		Stage selectAthlete = new Stage();
 		selectAthlete.setTitle("Select Athlete");
 		GridPane border = new GridPane();
 		border.setHgap(5);
 		border.setVgap(0);
-		//border.setMinWidth(400);
-		
+
+		//define Hbox to get two scene
 		HBox hbox=new HBox();
 		GridPane pane = new GridPane();
 		pane.setPadding(new Insets(5));
 		pane.setHgap(5);
 		pane.setVgap(0);
 
-		//pane.prefWidth(100);
-
+		//set the format of stage
 		final Text Name = new Text("Name");
 		final Text Age = new Text("Age");
 		final Text State = new Text("State");
@@ -79,14 +81,12 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 		border.add(AthleteType, 4, 0);
 		border.add(new Text("   "),5,0);
 
-
-
-		
+		//get athlete's information
 		String[] athleteInf = new String[5];
 		int countAthlete = 0;
 		countAthlete = athletes.size();
 		ArrayList<Button> choose=new ArrayList<Button>();
-		if (countAthlete == 0) {
+		if (countAthlete == 0) {// if there is no athlete
 			Stage errorWarning = new Stage();
 			errorWarning.setTitle("Warning");
 			Text warningText = new Text("Thers isn't any athlete's information!");
@@ -104,7 +104,7 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 			});
 			errorWarning.setScene(sceneWarning);
 			errorWarning.show();
-		} else {
+		} else {	
 			ArrayList<Text> text=new ArrayList<Text>();
 			for (int i = 0; i < countAthlete; i++) {
 				athleteInf = driver.getAthleteInf(athletes.get(i).getUserID());
@@ -126,7 +126,7 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 			
 
 		
-	//	Scene scene1 = new Scene(pane, 400, 550);
+		//set the selected athlete stage
 		final Text Name1 = new Text("Name");
 		final Text Age1 = new Text("Age");
 		final Text State1 = new Text("State");
@@ -138,24 +138,22 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 		Button next=new Button("Next");
 		pane.add(next,3,10);
 		
+		//event to go to the select offical stage
 		SelectOffical selectoffical=new SelectOffical(driver,selectAthlete,reopenMenu);
 		next.setOnAction(selectoffical);
-	//	selectedAthlete.setScene(scene1);
-	//	selectedAthlete.show(); // Display the stage
+
 		ScrollPane scrollPane = new ScrollPane();
-		scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER); //close the H scroll bar
 		scrollPane.setContent(border);
 		hbox.getChildren().addAll(scrollPane,pane);
 		
 		Scene scene = new Scene(hbox, 600, 350,Color.LIGHTGRAY);
-	/*	Stop[] stops = new Stop[] { new Stop(0, Color.BLACK), new Stop(1, Color.RED) };
-		LinearGradient lg1 = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, stops);
-		scene.setFill(lg1); */
 		selectAthlete.setScene(scene);
 		selectAthlete.show(); // Display the stage
 	}
 }
 
+//event to add athlete by button
 class AddAthlete implements EventHandler<ActionEvent>{
 
 	String athelteID;
@@ -181,7 +179,7 @@ class AddAthlete implements EventHandler<ActionEvent>{
 	@Override
 	public void handle(ActionEvent arg0) {
 		try {
-			driver.addAthlete(athelteID);
+			driver.addAthlete(athelteID);  //call the addathlete method to set this athlete into game
 			String[] athleteInf = new String[5];
 			athleteInf = driver.getAthleteInf(athelteID);
 			int Ycount=driver.getPresentAthlete().size();
@@ -189,9 +187,9 @@ class AddAthlete implements EventHandler<ActionEvent>{
 			pane.add(new Text(athleteInf[1]), 2, Ycount + 1);
 			pane.add(new Text(athleteInf[2]), 3, Ycount + 1);
 			pane.add(new Text(athleteInf[3]), 4, Ycount + 1);
-			border.getChildren().removeAll(text.get(lineNumber*4),text.get(lineNumber*4+1),text.get(lineNumber*4+2),text.get(lineNumber*4+3),choose.get(lineNumber));
-			
-		} catch (WrongTypeException e) {
+			//remove this athlete in waiting list
+			border.getChildren().removeAll(text.get(lineNumber*4),text.get(lineNumber*4+1),text.get(lineNumber*4+2),text.get(lineNumber*4+3),choose.get(lineNumber));		
+		} catch (WrongTypeException e) {  //catch wront type exception
 	    	Stage errorWarning = new Stage();
 	    	errorWarning.setTitle("Warning");
 	    	Text warningText=new Text("This athlete's type is wrong!!");
@@ -204,14 +202,34 @@ class AddAthlete implements EventHandler<ActionEvent>{
 			Button closeWindow=new Button("Ok");
 			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
 	    	
-	    	Scene sceneWarning = new Scene(pane,350,100);
+	    	Scene sceneWarning = new Scene(pane,500,100);
 	    	pane.setCenter(warningText);
 	    	pane.setLeft(warning);
 	    	pane.setBottom(closeWindow);
 	    	
 	    	errorWarning.setScene(sceneWarning); 
 	    	errorWarning.show();
-		} catch (NoThisAthleteException e) {
+		} catch (NoThisAthleteException e) { //cathc no this athlete exception
+	    	Stage errorWarning = new Stage();
+	    	errorWarning.setTitle("Warning");
+	    	Text warningText=new Text(e.getMessage());
+	    	BorderPane pane=new BorderPane();
+	    	pane.setPadding(new Insets(10,20, 10, 20));
+	    	
+			final ImageView warning = new ImageView(
+	      	      new Image("image/warning.png")
+	      	    );
+			Button closeWindow=new Button("Ok");
+			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
+	    	
+	    	Scene sceneWarning = new Scene(pane,450,100);
+	    	pane.setCenter(warningText);
+	    	pane.setLeft(warning);
+	    	pane.setBottom(closeWindow);
+	    	
+	    	errorWarning.setScene(sceneWarning); 
+	    	errorWarning.show();
+		} catch (GameFullException e) { //catch game full excption (>8 people)
 	    	Stage errorWarning = new Stage();
 	    	errorWarning.setTitle("Warning");
 	    	Text warningText=new Text(e.getMessage());
@@ -231,27 +249,7 @@ class AddAthlete implements EventHandler<ActionEvent>{
 	    	
 	    	errorWarning.setScene(sceneWarning); 
 	    	errorWarning.show();
-		} catch (GameFullException e) {
-	    	Stage errorWarning = new Stage();
-	    	errorWarning.setTitle("Warning");
-	    	Text warningText=new Text(e.getMessage());
-	    	BorderPane pane=new BorderPane();
-	    	pane.setPadding(new Insets(10,20, 10, 20));
-	    	
-			final ImageView warning = new ImageView(
-	      	      new Image("image/warning.png")
-	      	    );
-			Button closeWindow=new Button("Ok");
-			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
-	    	
-	    	Scene sceneWarning = new Scene(pane,350,100);
-	    	pane.setCenter(warningText);
-	    	pane.setLeft(warning);
-	    	pane.setBottom(closeWindow);
-	    	
-	    	errorWarning.setScene(sceneWarning); 
-	    	errorWarning.show();
-		} catch (RepeatAthleteJoinException e) {
+		} catch (RepeatAthleteJoinException e) { //catch repeat athlete exception
 			Stage errorWarning = new Stage();
 	    	errorWarning.setTitle("Warning");
 	    	Text warningText=new Text(e.getMessage());

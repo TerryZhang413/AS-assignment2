@@ -1,5 +1,9 @@
 package gui;
-
+/**
+ * @author Yanjie Zhang
+ * @content after selection athlete, user select offical in this menu
+ * 
+ */
 import java.util.ArrayList;
 
 import Exception.NoThisOfficialException;
@@ -29,7 +33,7 @@ public class SelectOffical implements EventHandler<ActionEvent>{
 	Driver driver;
 	Stage reopenMenu;
 	
-
+	//constructor to get data from last stage
 	public SelectOffical(Driver driver, Stage closeStage, Stage reopenMenu) {
 		this.closeStage=closeStage;
 		this.driver=driver;
@@ -40,13 +44,13 @@ public class SelectOffical implements EventHandler<ActionEvent>{
 	public void handle(ActionEvent arg0) {
 		closeStage.close();
 		Stage selectOffical=new Stage();
+		selectOffical.setTitle("Select Offical");
 		ArrayList<Officials> officals=new ArrayList<Officials>();
 		officals=driver.getOfficialList();
 		GridPane border = new GridPane();
 		border.setPadding(new Insets(5));
 		border.setHgap(5);
 		border.setVgap(0);
-		//pane.prefWidth(100);
 
 		final Text Name = new Text("Name");
 		final Text Age = new Text("Age");
@@ -101,8 +105,8 @@ public class SelectOffical implements EventHandler<ActionEvent>{
 		return officialID;
 	}
 
-	public void setOfficialID(String officialID) {
-		this.officialID = officialID;
+	public static void setOfficialID(String ID) {
+		officialID = ID;
 	}
 
 }
@@ -111,7 +115,7 @@ class DetermineOffical implements EventHandler<ActionEvent>{
 
 	Driver driver;
 	Stage closeStage;
-	String officialID;
+	String officialID=null;
 	Stage reopenMenu;
 	
 	DetermineOffical(Driver driver,Stage closeStage, Stage reopenMenu)
@@ -129,6 +133,7 @@ class DetermineOffical implements EventHandler<ActionEvent>{
 			if(officialID!=null)
 			{	
 				driver.addOfficial(officialID);
+				SelectOffical.setOfficialID(null);
 				closeStage.close();	
 				reopenMenu.show();
 			}

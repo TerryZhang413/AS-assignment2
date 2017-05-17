@@ -1,5 +1,9 @@
 package gui;
-
+/**
+ * @author Yanjie Zhang
+ * @content stage showing all points of every athlete
+ * 
+ */
 import java.util.ArrayList;
 
 import Ozlympic.Athletes;
@@ -21,6 +25,7 @@ class ShowFinalPoint implements EventHandler<ActionEvent> {
 	ArrayList<Athletes> athletes;
 	Driver driver;
 
+	//constructor to get data from last stage
 	ShowFinalPoint(Driver driver, ArrayList<Athletes> athletes) {
 		this.athletes = athletes;
 		this.driver = driver;
@@ -29,6 +34,7 @@ class ShowFinalPoint implements EventHandler<ActionEvent> {
 	@Override
 	public void handle(ActionEvent event) {
 
+		//set the final point scene
 		Stage finalPoint = new Stage();
 		finalPoint.setTitle("Final Point");
 		GridPane border = new GridPane();
@@ -47,10 +53,11 @@ class ShowFinalPoint implements EventHandler<ActionEvent> {
 		border.add(AthleteType, 3, 0);
 		border.add(Point, 4, 0);
 
+		//get all athlete's infoamation
 		String[] athleteInf = new String[5];
 		int countAthlete = 0;
 		countAthlete = athletes.size();
-		if (countAthlete == 0) {
+		if (countAthlete == 0) { //if no athlete
 			Stage errorWarning = new Stage();
 			errorWarning.setTitle("Warning");
 			Text warningText = new Text("Thers isn't any athlete's information!");

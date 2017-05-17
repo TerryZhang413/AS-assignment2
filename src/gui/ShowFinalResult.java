@@ -1,5 +1,10 @@
 package gui;
 
+/**
+ * @author Yanjie Zhang
+ * @content show the result of every game
+ * 
+ */
 import java.util.ArrayList;
 
 import Exception.NullResultException;
@@ -24,6 +29,7 @@ public class ShowFinalResult implements EventHandler<ActionEvent> {
 	
 	Driver driver;
 
+	//constructor to get data from last stage
 	ShowFinalResult(Driver driver) {
 		this.driver = driver;
 	}
@@ -31,6 +37,7 @@ public class ShowFinalResult implements EventHandler<ActionEvent> {
 	@Override
 	public void handle(ActionEvent event) {
 		try {
+			//set result stage
 			ArrayList<Game> games;
 			games=driver.getGame(true);
 			int countGame = games.size();
@@ -47,7 +54,7 @@ public class ShowFinalResult implements EventHandler<ActionEvent> {
 			border.setVgap(5);
 	
 			Scene scene=new Scene(scrollPane,450, 400);         
-			int lastLineNum=0;
+			int lastLineNum=0;// set a last line number to count how many lines already been writen
 			for(int i=0;i<countGame;i++)
 			{
 		        Text GameNumber=new Text( "GameNumber: "+games.get(i).getGameID());
@@ -59,7 +66,7 @@ public class ShowFinalResult implements EventHandler<ActionEvent> {
 		        final Text AthleteType=new Text("Athlete Type");
 		        final Text Time=new Text("Time");
 		        final Text Point=new Text("Point");
-		        border.add(GameNumber, 0, lastLineNum+0);
+		        border.add(GameNumber, 0, lastLineNum+0);  //set the location
 		        border.add(OfficalName, 0, lastLineNum+1);
 		        border.add(Name, 0, lastLineNum+2);
 		        border.add(Age, 1, lastLineNum+2);
@@ -69,8 +76,8 @@ public class ShowFinalResult implements EventHandler<ActionEvent> {
 		        border.add(Point, 5, lastLineNum+2);
 		        
 		         int countAthlete=games.get(i).getAthletes().size();
-		        for(int j=0;j<countAthlete;j++)
-		        {
+		        for(int j=0;j<countAthlete;j++)  //get how many athlete in this game
+		        {	//read their information
 		    		String[] athleteinf = driver.getAthleteInf(games.get(i).getAthletes().get(j));
 		        	int time = games.get(i).getResults().get(j);
 					int point = games.get(i).getPoints().get(j);
@@ -85,7 +92,7 @@ public class ShowFinalResult implements EventHandler<ActionEvent> {
 			}
 				showFinalResult.setScene(scene);
 				showFinalResult.show(); // Display the stage
-		} catch (NullResultException e) {
+		} catch (NullResultException e) {  //catch the no result exception
 			Stage errorWarning = new Stage();
 	    	errorWarning.setTitle("Warning");
 	    	Text warningText=new Text(e.getMessage());
@@ -98,7 +105,7 @@ public class ShowFinalResult implements EventHandler<ActionEvent> {
 			Button closeWindow=new Button("Ok");
 			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
 	    	
-	    	Scene sceneWarning = new Scene(pane,350,100);
+	    	Scene sceneWarning = new Scene(pane,500,100);
 	    	pane.setCenter(warningText);
 	    	pane.setLeft(warning);
 	    	pane.setBottom(closeWindow);
