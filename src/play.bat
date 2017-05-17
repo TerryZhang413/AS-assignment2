@@ -1,0 +1,1 @@
+java -cp .;hsqldb.jar gui.Ozlympic
