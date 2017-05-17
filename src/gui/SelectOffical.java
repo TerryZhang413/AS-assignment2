@@ -44,6 +44,7 @@ public class SelectOffical implements EventHandler<ActionEvent>{
 	public void handle(ActionEvent arg0) {
 		closeStage.close();
 		Stage selectOffical=new Stage();
+		selectOffical.setTitle("Select Offical");
 		ArrayList<Officials> officals=new ArrayList<Officials>();
 		officals=driver.getOfficialList();
 		GridPane border = new GridPane();
