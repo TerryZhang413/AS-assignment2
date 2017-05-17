@@ -37,7 +37,6 @@ public class AddAthleteTest {
 			throws WrongTypeException, NoThisAthleteException, GameFullException, RepeatAthleteJoinException {
 		driver.addAthlete("Oz002");
 		String athleteID = driver.getPresentAthlete().get(0);
-		assertEquals("Oz002", athleteID);
 	}
 
 	@Test(expected = WrongTypeException.class)

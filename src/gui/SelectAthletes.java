@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import Exception.GameFullException;
 import Exception.NoThisAthleteException;
+import Exception.OutOfGameType;
 import Exception.RepeatAthleteJoinException;
 import Exception.WrongTypeException;
 import Ozlympic.Athletes;
@@ -54,7 +55,29 @@ public class SelectAthletes implements EventHandler<ActionEvent>{
 	@Override
 	public void handle(ActionEvent event) {
 		Ozlympic.gameTypeName = gameTypeName;
-		driver.selectGame(gameType);
+		try {
+			driver.selectGame(gameType);
+		} catch (OutOfGameType e) {
+			Stage errorWarning = new Stage();
+	    	errorWarning.setTitle("Warning");
+	    	Text warningText=new Text("This athlete's type is wrong!!");
+	    	BorderPane pane=new BorderPane();
+	    	pane.setPadding(new Insets(10,20, 10, 20));
+	    	
+			final ImageView warning = new ImageView(
+	      	      new Image("image/warning.png")
+	      	    );
+			Button closeWindow=new Button("Ok");
+			closeWindow.setOnAction((ActionEvent t)->{errorWarning.close();});
+	    	
+	    	Scene sceneWarning = new Scene(pane,500,100);
+	    	pane.setCenter(warningText);
+	    	pane.setLeft(warning);
+	    	pane.setBottom(closeWindow);
+	    	
+	    	errorWarning.setScene(sceneWarning); 
+	    	errorWarning.show();
+		}
 		closeStage.close();	
 		
 		Stage selectAthlete = new Stage();
